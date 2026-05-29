@@ -1,0 +1,623 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>আমার ব্যাংক</title>
+<link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@300;400;500;600;700&family=Noto+Serif+Bengali:wght@400;600;700;800&family=Tiro+Bangla:ital@0;1&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="amar-bank.css">
+</head>
+<body>
+
+<!-- Desktop overlay -->
+<div id="desktop-overlay">
+  <div class="phone-icon">📱</div>
+  <h2>মোবাইলে খুলুন</h2>
+  <p>আমার ব্যাংক অ্যাপ শুধুমাত্র মোবাইল ডিভাইসে কাজ করে। অনুগ্রহ করে আপনার স্মার্টফোন থেকে এই লিঙ্কটি খুলুন।</p>
+  <p style="font-size:13px;color:#555;">This app is designed for mobile devices only. Please open it on your phone.</p>
+</div>
+
+<!-- Fullscreen prompt -->
+<div id="fullscreen-prompt">
+  <div class="fs-icon">⛶</div>
+  <h2>ফুল স্ক্রিনে দেখুন</h2>
+  <p>ভালো অভিজ্ঞতার জন্য ফুল স্ক্রিন মোডে ব্যবহার করুন।</p>
+  <button id="fs-btn" onclick="goFullscreen()">ফুল স্ক্রিন করুন</button>
+  <button id="fs-skip" onclick="skipFullscreen()">এড়িয়ে যান</button>
+</div>
+
+<!-- App -->
+<div id="app">
+  <!-- Status Bar -->
+  <div class="status-bar">
+    <span>9:41</span>
+    <div class="status-right">
+      <svg width="16" height="12" viewBox="0 0 16 12" fill="currentColor"><rect x="0" y="4" width="3" height="8" rx="1"/><rect x="4.5" y="2.5" width="3" height="9.5" rx="1"/><rect x="9" y="1" width="3" height="11" rx="1"/><rect x="13.5" y="0" width="2.5" height="12" rx="1" opacity="0.3"/></svg>
+      <svg width="16" height="12" viewBox="0 0 16 12" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M8 9.5a1.5 1.5 0 100 3 1.5 1.5 0 000-3z"/><path d="M5 7c.8-.8 1.9-1.3 3-1.3s2.2.5 3 1.3"/><path d="M2.5 4.5C3.9 3.1 5.9 2.2 8 2.2s4.1.9 5.5 2.3"/></svg>
+      <svg width="22" height="12" viewBox="0 0 22 12" fill="none"><rect x="0.5" y="0.5" width="18" height="11" rx="3" stroke="currentColor" stroke-width="1.2"/><rect x="2" y="2" width="14" height="8" rx="1.5" fill="currentColor"/><path d="M20 4v4a2 2 0 000-4z" fill="currentColor"/></svg>
+    </div>
+  </div>
+
+  <!-- LOGIN SCREEN -->
+  <div id="login-screen" class="screen active">
+    <div class="scroll-area">
+      <div class="bank-header">
+        <div class="bank-logo-group">
+          <div class="bank-logo">আ</div>
+          <div class="bank-name-block">
+            <span class="bank-name-bn">আমার ব্যাংক</span>
+            <span class="bank-name-en">Amar Bank</span>
+          </div>
+        </div>
+        <div class="info-btn" onclick="toggleTerms()">
+          <svg viewBox="0 0 24 24" fill="none" stroke="var(--green-dark)" stroke-width="2.5">
+            <circle cx="12" cy="12" r="10"/>
+            <line x1="12" y1="8" x2="12" y2="8.5" stroke-linecap="round" stroke-width="3"/>
+            <line x1="12" y1="12" x2="12" y2="16" stroke-linecap="round" stroke-width="2.5"/>
+          </svg>
+        </div>
+      </div>
+
+      <div id="terms-overlay" onclick="closeTerms()"></div>
+      <div id="terms-popup">
+        <h3>শর্তাবলী</h3>
+        <ul>
+          <li>আপনার সব তথ্য এনক্রিপ্ট করা থাকে</li>
+          <li>কোনো কোড কাউকে শেয়ার করবেন না</li>
+          <li>ভুল লেনদেন ৩০ মিনিটে ফেরত নিতে পারবেন</li>
+          <li>২৪/৭ গ্রাহক সেবা: ১৬২৪৭</li>
+        </ul>
+      </div>
+
+      <div class="welcome-text">
+        <div class="welcome-bn">স্বাগতম, ফিরে আসছেন?</div>
+        <div class="welcome-en">Welcome back</div>
+      </div>
+
+      <!-- Fingerprint card - clickable, shows dummy toast -->
+      <div class="auth-card" onclick="showDummyToast()">
+        <div class="auth-icon-circle" style="background:var(--teal-circle)">
+          <svg viewBox="0 0 24 24" style="stroke:var(--green-dark);fill:none;stroke-width:1.5;stroke-linecap:round;stroke-linejoin:round;width:36px;height:36px;">
+          <path d="M12 10a2 2 0 0 0-2 2c0 1.02-.1 2.51-.26 4"/>
+          <path d="M14 13.12c0 2.38 0 6.38-1 8.88"/>
+          <path d="M17.29 21.02c.12-.6.43-2.3.5-3.02"/>
+          <path d="M2 12a10 10 0 0 1 18-6"/>
+          <path d="M2 16h.01"/>
+          <path d="M21.8 16c.2-2 .131-5.354 0-6"/>
+          <path d="M5 19.5C5.5 18 6 15 6 12a6 6 0 0 1 .34-2"/>
+          <path d="M8.65 22c.21-.66.45-1.32.57-2"/>
+          <path d="M9 6.8a6 6 0 0 1 9 5.2v2"/>
+        </svg>
+        </div>
+        <span class="auth-title-bn">আঙুলের ছাপ দিন</span>
+        <span class="auth-title-en">Fingerprint Sign In</span>
+      </div>
+
+      <!-- Face unlock card - clickable, shows dummy toast -->
+      <div class="auth-card" onclick="showDummyToast()">
+        <div class="auth-icon-circle" style="background:var(--yellow-circle)">
+          <svg viewBox="0 0 24 24" style="stroke:#8a6d00;fill:none;stroke-width:1.5;">
+            <circle cx="12" cy="12" r="3"/>
+            <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/>
+          </svg>
+        </div>
+        <span class="auth-title-bn">মুখ দেখান</span>
+        <span class="auth-title-en">Face Recognition</span>
+      </div>
+
+      <!-- PIN card -->
+      <div class="auth-card" onclick="openPin('login')">
+        <div class="auth-icon-circle" style="background:var(--red-circle)">
+          <svg viewBox="0 0 24 24" style="stroke:#8a3020;fill:none;stroke-width:1.5;">
+            <rect x="5" y="2" width="14" height="20" rx="2" ry="2"/>
+            <line x1="12" y1="18" x2="12" y2="18"/>
+          </svg>
+        </div>
+        <span class="auth-title-bn">পিন নম্বর দিয়ে লগইন</span>
+        <span class="auth-title-en">Enter Your PIN</span>
+      </div>
+
+      <div class="new-user-row"><span class="new-user-text">নতুন ব্যবহারকারী?</span></div>
+      <button class="btn-primary" onclick="showDummyToast()">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+        নতুন অ্যাকাউন্ট খুলুন
+      </button>
+      <div class="open-account-note">তথ্য-পত্র সহ ৫ মিনিটে</div>
+    </div>
+  </div>
+
+  <!-- HOME SCREEN -->
+  <div id="home-screen" class="screen">
+    <div class="scroll-area">
+      <div class="home-top">
+        <div>
+          <div class="home-greeting-name">কবির সাহেব</div>
+          <div class="home-greeting-en" id="greeting-en">Good morning</div>
+        </div>
+        <button class="mic-btn">
+          <svg viewBox="0 0 24 24"><path d="M12 1a3 3 0 00-3 3v8a3 3 0 006 0V4a3 3 0 00-3-3z"/><path d="M19 10v2a7 7 0 01-14 0v-2"/><line x1="12" y1="19" x2="12" y2="23"/><line x1="8" y1="23" x2="16" y2="23"/></svg>
+        </button>
+      </div>
+
+      <div class="balance-card" onclick="toggleBalanceVisibility()">
+        <div class="balance-label">আপনার টাকা</div>
+        <div class="balance-amount" id="balance-display">৳ ৮৫,৪২০</div>
+      </div>
+
+      <div class="learn-btn" onclick="navigate('help')">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--green-dark)" stroke-width="2"><rect x="2" y="6" width="20" height="12" rx="2"/><circle cx="12" cy="12" r="3"/><path d="M6 12h.01M18 12h.01"/></svg>
+        শিখুন
+      </div>
+
+      <div class="quick-actions" id="quick-actions"></div>
+
+      <div class="security-note">
+        <svg viewBox="0 0 24 24" style="stroke:#8a6d00;fill:none;width:22px;height:22px"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+        <div>
+          <div class="security-text-bn">ব্যাংক কখনো কোড চায় না</div>
+          <div class="security-text-en">Never share codes</div>
+        </div>
+      </div>
+    </div>
+    <div class="bottom-nav" id="bottom-nav-home"></div>
+  </div>
+
+  <!-- HISHAB (TRANSACTIONS) SCREEN - 2nd tab, transactions only -->
+  <div id="receive-screen" class="screen">
+
+    <!-- Transactions -->
+    <div class="scroll-area" style="padding-bottom:20px;">
+      <div class="section-title" style="padding:16px 20px 8px;">সাম্প্রতিক লেনদেন</div>
+      <div id="txn-list-hishab"></div>
+    </div>
+    <div class="bottom-nav" id="bottom-nav-receive"></div>
+  </div>
+
+  <!-- QR RECEIVE SCREEN (only for নিন button) -->
+  <div id="qr-screen" class="screen">
+    <div class="screen-header">
+      <div class="back-btn" onclick="navigate('home')">
+        <svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"/></svg>
+      </div>
+      <span class="screen-title">টাকা নিন</span>
+    </div>
+    <div class="scroll-area" id="hishab-qr-panel">
+      <div class="qr-card">
+        <div class="qr-name">কবির সাহেব</div>
+        <div class="qr-phone">+৮৮০ ১৭১১-৯৮৭৬৫৪</div>
+        <svg class="qr-svg" viewBox="0 0 160 160" xmlns="http://www.w3.org/2000/svg">
+          <rect width="160" height="160" fill="white" rx="8"/>
+          <rect x="10" y="10" width="40" height="40" fill="none" stroke="#1a3d2e" stroke-width="4" rx="4"/>
+          <rect x="16" y="16" width="28" height="28" fill="#1a3d2e" rx="2"/>
+          <rect x="110" y="10" width="40" height="40" fill="none" stroke="#1a3d2e" stroke-width="4" rx="4"/>
+          <rect x="116" y="16" width="28" height="28" fill="#1a3d2e" rx="2"/>
+          <rect x="10" y="110" width="40" height="40" fill="none" stroke="#1a3d2e" stroke-width="4" rx="4"/>
+          <rect x="16" y="116" width="28" height="28" fill="#1a3d2e" rx="2"/>
+          <rect x="60" y="10" width="8" height="8" fill="#1a3d2e" rx="1"/>
+          <rect x="72" y="10" width="8" height="8" fill="#1a3d2e" rx="1"/>
+          <rect x="84" y="10" width="8" height="8" fill="#1a3d2e" rx="1"/>
+          <rect x="60" y="22" width="8" height="8" fill="#1a3d2e" rx="1"/>
+          <rect x="84" y="22" width="8" height="8" fill="#1a3d2e" rx="1"/>
+          <rect x="72" y="34" width="8" height="8" fill="#1a3d2e" rx="1"/>
+          <rect x="60" y="60" width="8" height="8" fill="#1a3d2e" rx="1"/>
+          <rect x="72" y="60" width="8" height="8" fill="#1a3d2e" rx="1"/>
+          <rect x="84" y="60" width="8" height="8" fill="#1a3d2e" rx="1"/>
+          <rect x="96" y="60" width="8" height="8" fill="#1a3d2e" rx="1"/>
+          <rect x="60" y="72" width="8" height="8" fill="#1a3d2e" rx="1"/>
+          <rect x="84" y="72" width="8" height="8" fill="#1a3d2e" rx="1"/>
+          <rect x="96" y="72" width="8" height="8" fill="#1a3d2e" rx="1"/>
+          <rect x="72" y="84" width="8" height="8" fill="#1a3d2e" rx="1"/>
+          <rect x="96" y="84" width="8" height="8" fill="#1a3d2e" rx="1"/>
+          <rect x="60" y="96" width="8" height="8" fill="#1a3d2e" rx="1"/>
+          <rect x="84" y="96" width="8" height="8" fill="#1a3d2e" rx="1"/>
+          <rect x="60" y="120" width="8" height="8" fill="#1a3d2e" rx="1"/>
+          <rect x="84" y="120" width="8" height="8" fill="#1a3d2e" rx="1"/>
+          <rect x="96" y="120" width="8" height="8" fill="#1a3d2e" rx="1"/>
+          <rect x="72" y="132" width="8" height="8" fill="#1a3d2e" rx="1"/>
+          <rect x="96" y="132" width="8" height="8" fill="#1a3d2e" rx="1"/>
+          <rect x="108" y="60" width="8" height="8" fill="#1a3d2e" rx="1"/>
+          <rect x="120" y="72" width="8" height="8" fill="#1a3d2e" rx="1"/>
+          <rect x="132" y="60" width="8" height="8" fill="#1a3d2e" rx="1"/>
+          <rect x="108" y="84" width="8" height="8" fill="#1a3d2e" rx="1"/>
+          <rect x="132" y="84" width="8" height="8" fill="#1a3d2e" rx="1"/>
+          <rect x="120" y="96" width="8" height="8" fill="#1a3d2e" rx="1"/>
+          <rect x="108" y="108" width="8" height="8" fill="#1a3d2e" rx="1"/>
+          <rect x="120" y="120" width="8" height="8" fill="#1a3d2e" rx="1"/>
+          <rect x="132" y="108" width="8" height="8" fill="#1a3d2e" rx="1"/>
+          <rect x="132" y="132" width="8" height="8" fill="#1a3d2e" rx="1"/>
+          <rect x="66" y="66" width="28" height="28" fill="white" rx="4"/>
+          <rect x="68" y="68" width="24" height="24" fill="#1a3d2e" rx="3"/>
+          <text x="80" y="85" text-anchor="middle" fill="white" font-size="14" font-weight="700" font-family="serif">আ</text>
+        </svg>
+        <button class="btn-primary" style="width:auto;padding:12px 28px;font-size:14px;" onclick="showDummyToast()">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2"><path d="M4 12v8a2 2 0 002 2h12a2 2 0 002-2v-8"/><polyline points="16 6 12 2 8 6"/><line x1="12" y1="2" x2="12" y2="15"/></svg>
+          শেয়ার করুন
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- SEND SCREEN -->
+  <div id="send-screen" class="screen">
+    <div class="screen-header">
+      <div class="back-btn" onclick="navigate('home')">
+        <svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"/></svg>
+      </div>
+      <span class="screen-title">টাকা পাঠান</span>
+    </div>
+    <div class="scroll-area" style="padding:0 16px 20px;">
+
+      <!-- Recipient selector - opens picker modal -->
+      <div id="selected-contact-card" class="contact-select-card" onclick="showContactPicker()">
+        <div class="contact-avatar-sm" id="send-contact-avatar">র</div>
+        <div class="contact-info">
+          <div class="contact-name" id="send-contact-name">রফিক উদ্দিন</div>
+          <div class="contact-phone tiro-phone" id="send-contact-phone">+৮৮০ ১৭১১-২৩৪৫৬৭</div>
+        </div>
+        <svg viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"/></svg>
+      </div>
+
+      <div class="amount-label">কত টাকা পাঠাবেন?</div>
+      <div class="amount-card">
+        <!-- Inline editable amount input -->
+        <div class="amount-input-wrap">
+          <span class="amount-currency-symbol">৳</span>
+          <input type="tel" id="send-amount-input" class="amount-input-field" value="500" inputmode="numeric" pattern="[0-9]*" oninput="onAmountInput(this)" onfocus="onAmountFocus(this)" onblur="onAmountBlur(this)">
+        </div>
+        <div class="amount-display" id="send-amount-display" style="display:none;">৳ ৫০০</div>
+        <div class="preset-grid">
+          <div class="preset-btn" onclick="selectPreset(100, this)">
+            <div class="preset-amount">৳১০০</div>
+            <div class="preset-en">One Hundred</div>
+          </div>
+          <div class="preset-btn selected" onclick="selectPreset(500, this)">
+            <div class="preset-amount">৳৫০০</div>
+            <div class="preset-en">Five Hundred</div>
+          </div>
+          <div class="preset-btn" onclick="selectPreset(1000, this)">
+            <div class="preset-amount">৳১০০০</div>
+            <div class="preset-en">One Thousand</div>
+          </div>
+          <div class="preset-btn" onclick="selectPreset(2000, this)">
+            <div class="preset-amount">৳২০০০</div>
+            <div class="preset-en">Two Thousand</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="review-card">
+        <div class="review-title">একবার দেখে নিন</div>
+        <div class="review-row"><span class="review-key">প্রাপক</span><span class="review-val" id="review-recipient">রফিক উদ্দিন</span></div>
+        <div class="review-row"><span class="review-key">পরিমাণ</span><span class="review-val" id="review-amount">৳ ৫০০</span></div>
+        <div class="review-row"><span class="review-key">চার্জ</span><span class="review-val">৳ ০</span></div>
+        <div class="review-row"><span class="review-key">মোট</span><span class="review-val" id="review-total">৳ ৫০০</span></div>
+      </div>
+
+      <button class="btn-primary" onclick="initiateSend()">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+        পাঠিয়ে দিন
+      </button>
+    </div>
+  </div>
+
+  <!-- BILLS SCREEN -->
+  <div id="bills-screen" class="screen">
+    <div class="screen-header">
+      <div class="back-btn" onclick="navigate('home')">
+        <svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"/></svg>
+      </div>
+      <span class="screen-title">বিল পরিশোধ</span>
+    </div>
+    <div class="scroll-area">
+      <div style="padding:0 0 16px;">
+        <div style="padding:8px 16px 12px;font-size:14px;color:var(--text-mid);font-family:'Noto Serif Bengali';">বিলের ধরন বেছে নিন</div>
+        <div class="bill-category" onclick="showBillModal('বিদ্যুৎ','ঢাকা বিদ্যুৎ বিতরণ')">
+          <div class="bill-icon" style="background:#fff9e6">⚡</div>
+          <div><div class="bill-name">বিদ্যুৎ বিল</div><div class="bill-en">Electricity Bill</div></div>
+        </div>
+        <div class="bill-category" onclick="showBillModal('গ্যাস','তিতাস গ্যাস')">
+          <div class="bill-icon" style="background:#e6f9f0">🔥</div>
+          <div><div class="bill-name">গ্যাস বিল</div><div class="bill-en">Gas Bill</div></div>
+        </div>
+        <div class="bill-category" onclick="showBillModal('পানি','ঢাকা ওয়াসা')">
+          <div class="bill-icon" style="background:#e6f0ff">💧</div>
+          <div><div class="bill-name">পানি বিল</div><div class="bill-en">Water Bill</div></div>
+        </div>
+        <div class="bill-category" onclick="showBillModal('ইন্টারনেট','ব্রডব্যান্ড সার্ভিস')">
+          <div class="bill-icon" style="background:#f0e6ff">🌐</div>
+          <div><div class="bill-name">ইন্টারনেট বিল</div><div class="bill-en">Internet Bill</div></div>
+        </div>
+        <div class="bill-category" onclick="showBillModal('মোবাইল রিচার্জ','মোবাইল অপারেটর')">
+          <div class="bill-icon" style="background:#ffe6f0">📱</div>
+          <div><div class="bill-name">মোবাইল রিচার্জ</div><div class="bill-en">Mobile Recharge</div></div>
+        </div>
+        <div class="bill-category" onclick="showBillModal('টিভি','ক্যাবল সার্ভিস')">
+          <div class="bill-icon" style="background:#e6fff9">📺</div>
+          <div><div class="bill-name">টিভি বিল</div><div class="bill-en">TV Bill</div></div>
+        </div>
+      </div>
+    </div>
+    <div class="bottom-nav" id="bottom-nav-bills"></div>
+  </div>
+
+  <!-- HELP SCREEN -->
+  <div id="help-screen" class="screen">
+    <div class="scroll-area">
+      <div style="padding:16px 0;">
+        <div class="screen-title" style="padding:0 16px 16px;">শিখুন</div>
+        <div class="tutorial-card" onclick="showTutorial('send')">
+          <div class="tutorial-play" style="background:var(--teal-circle)">
+            <svg viewBox="0 0 24 24" style="stroke:var(--green-dark)"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+          </div>
+          <div><div class="tutorial-title">টাকা পাঠান</div><div class="tutorial-en">Practice: Send Money</div></div>
+        </div>
+        <div class="tutorial-card" onclick="showTutorial('receive')">
+          <div class="tutorial-play" style="background:var(--yellow-circle)">
+            <svg viewBox="0 0 24 24" style="stroke:#8a6d00"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+          </div>
+          <div><div class="tutorial-title">টাকা নিন</div><div class="tutorial-en">Practice: Receive Money</div></div>
+        </div>
+        <div class="tutorial-card" onclick="showTutorial('bill')">
+          <div class="tutorial-play" style="background:var(--red-circle)">
+            <svg viewBox="0 0 24 24" style="stroke:#8a3020"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+          </div>
+          <div><div class="tutorial-title">বিল পরিশোধ</div><div class="tutorial-en">Practice: Pay Bills</div></div>
+        </div>
+        <div class="tutorial-card" onclick="showTutorial('contact')">
+          <div class="tutorial-play" style="background:var(--purple-circle)">
+            <svg viewBox="0 0 24 24" style="stroke:#5a4a8a"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+          </div>
+          <div><div class="tutorial-title">যোগাযোগ যোগ করুন</div><div class="tutorial-en">Practice: Add Contacts</div></div>
+        </div>
+
+        <div style="padding:8px 16px;font-family:'Noto Serif Bengali';font-size:13px;color:var(--text-mid);">সরাসরি সাহায্য পান</div>
+        <div style="padding:0 16px;">
+          <div class="helpline-btn">
+            <svg viewBox="0 0 24 24"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07A19.5 19.5 0 013.07 9.27 19.79 19.79 0 01.12 0.64a2 2 0 012-2.18h3a2 2 0 012 1.72c.127.96.361 1.903.7 2.81a2 2 0 01-.45 2.11L6.91 8.35a16 16 0 006.72 6.72l1.07-1.06a2 2 0 012.11-.45c.907.339 1.85.573 2.81.7a2 2 0 011.72 2.02z"/></svg>
+            <div class="helpline-text">
+              <div class="helpline-label">২৪/৭ হেল্পলাইন</div>
+              <div class="helpline-num">১৬২৪৭</div>
+            </div>
+          </div>
+        </div>
+
+        <div style="padding:12px 16px 4px;font-family:'Noto Serif Bengali';font-size:13px;color:var(--text-mid);">সাধারণ প্রশ্নোত্তর</div>
+        <div style="padding:0 16px;">
+          <div class="faq-item" onclick="toggleFaq(this)">
+            <div class="faq-q">সর্বোচ্চ কত টাকা পাঠাতে পারি?</div>
+            <div class="faq-a">প্রতিদিন ৫০,০০০ টাকা পাঠাতে পারবেন।</div>
+          </div>
+          <div class="faq-item" onclick="toggleFaq(this)">
+            <div class="faq-q">ভুলে পাঠালে কী হবে?</div>
+            <div class="faq-a">৩০ মিনিটের মধ্যে লেনদেন পাতায় গিয়ে ফেরত নিতে পারবেন।</div>
+          </div>
+          <div class="faq-item" onclick="toggleFaq(this)">
+            <div class="faq-q">কোনো চার্জ আছে?</div>
+            <div class="faq-a">৫০ টাকার কম লেনদেনে চার্জ নেই।</div>
+          </div>
+          <div class="faq-item" onclick="toggleFaq(this)">
+            <div class="faq-q">পিন ভুলে গেলে কী করব?</div>
+            <div class="faq-a">লগইন পাতায় "পিন ভুলে গেছি" বোতামে চাপুন। OTP দিয়ে নতুন পিন সেট করুন।</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="bottom-nav" id="bottom-nav-help"></div>
+  </div>
+
+  <!-- PROFILE SCREEN -->
+  <div id="profile-screen" class="screen">
+    <div class="scroll-area">
+      <div style="padding:16px;">
+        <div class="screen-title" style="padding-bottom:4px;">প্রোফাইল</div>
+        <div class="profile-section-title">আপনার হোমপেজ কাস্টমাইজ করুন</div>
+        <div class="profile-sub">বারবার ব্যবহার করেন এমন কাজগুলো বেছে নিন</div>
+
+        <div id="toggle-list"></div>
+
+        <div class="settings-title">সেটিংস</div>
+        <div class="settings-item">
+          <svg viewBox="0 0 24 24"><path d="M18 8A6 6 0 006 8c0 7-3 9-3 9h18s-3-2-3-9M13.73 21a2 2 0 01-3.46 0"/></svg>
+          <div class="settings-label"><div class="settings-name">বিজ্ঞপ্তি</div><div class="settings-en">Notifications</div></div>
+          <svg viewBox="0 0 24 24" style="width:16px;height:16px;stroke:var(--text-light);fill:none"><polyline points="9 18 15 12 9 6"/></svg>
+        </div>
+        <div class="settings-item">
+          <svg viewBox="0 0 24 24"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg>
+          <div class="settings-label"><div class="settings-name">নিরাপত্তা</div><div class="settings-en">Security</div></div>
+          <svg viewBox="0 0 24 24" style="width:16px;height:16px;stroke:var(--text-light);fill:none"><polyline points="9 18 15 12 9 6"/></svg>
+        </div>
+        <div class="settings-item">
+          <svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+          <div class="settings-label"><div class="settings-name">নীতিমালা</div><div class="settings-en">Policy</div></div>
+          <svg viewBox="0 0 24 24" style="width:16px;height:16px;stroke:var(--text-light);fill:none"><polyline points="9 18 15 12 9 6"/></svg>
+        </div>
+
+        <button class="logout-btn" onclick="logout()">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 21H5a2 2 0 01-2-2V5a2 2 0 012-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+          লগ আউট করুন
+        </button>
+      </div>
+    </div>
+    <div class="bottom-nav" id="bottom-nav-profile"></div>
+  </div>
+
+  <!-- PIN SCREEN -->
+  <div id="pin-screen">
+    <div style="display:flex;align-items:center;gap:10px;align-self:flex-start;margin-bottom:20px;cursor:pointer;" onclick="closePin()">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="var(--green-dark)" stroke-width="2"><polyline points="15 18 9 12 15 6"/></svg>
+      <span style="font-family:'Noto Serif Bengali';font-size:20px;font-weight:700;">পিন দিন</span>
+    </div>
+    <div class="pin-subtitle" id="pin-context-text">আপনার ৪ সংখ্যার পিন দিন</div>
+    <div class="pin-dots" id="pin-dots">
+      <div class="pin-dot" id="d0"></div>
+      <div class="pin-dot" id="d1"></div>
+      <div class="pin-dot" id="d2"></div>
+      <div class="pin-dot" id="d3"></div>
+    </div>
+    <div class="pin-error" id="pin-error"></div>
+    <div class="pin-attempts" id="pin-attempts-text"></div>
+    <div class="pin-keypad">
+      <div class="key-btn" onclick="pinKey('১')">১</div>
+      <div class="key-btn" onclick="pinKey('২')">২</div>
+      <div class="key-btn" onclick="pinKey('৩')">৩</div>
+      <div class="key-btn" onclick="pinKey('৪')">৪</div>
+      <div class="key-btn" onclick="pinKey('৫')">৫</div>
+      <div class="key-btn" onclick="pinKey('৬')">৬</div>
+      <div class="key-btn" onclick="pinKey('৭')">৭</div>
+      <div class="key-btn" onclick="pinKey('৮')">৮</div>
+      <div class="key-btn" onclick="pinKey('৯')">৯</div>
+      <div class="key-btn empty"></div>
+      <div class="key-btn" onclick="pinKey('০')">০</div>
+      <div class="key-btn del" onclick="pinDelete()">⌫</div>
+    </div>
+  </div>
+
+  <!-- OTP SCREEN -->
+  <div id="otp-screen">
+    <div class="otp-back" onclick="closeOtp()">
+      <svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"/></svg>
+      <span>নিরাপত্তা কোড</span>
+    </div>
+    <div class="otp-subtitle">আমরা আপনার নম্বরে কোড পাঠিয়েছি</div>
+    <div class="otp-phone-display">০১৭১১-২৩৪৫৬৭</div>
+    <!-- OTP inline input boxes -->
+    <div class="otp-boxes" id="otp-boxes">
+      <input class="otp-box" id="ob0" type="tel" maxlength="1" inputmode="numeric" pattern="[0-9]*" oninput="otpBoxInput(this,0)" onkeydown="otpBoxKeydown(this,0)" onfocus="this.select()">
+      <input class="otp-box" id="ob1" type="tel" maxlength="1" inputmode="numeric" pattern="[0-9]*" oninput="otpBoxInput(this,1)" onkeydown="otpBoxKeydown(this,1)" onfocus="this.select()">
+      <input class="otp-box" id="ob2" type="tel" maxlength="1" inputmode="numeric" pattern="[0-9]*" oninput="otpBoxInput(this,2)" onkeydown="otpBoxKeydown(this,2)" onfocus="this.select()">
+      <input class="otp-box" id="ob3" type="tel" maxlength="1" inputmode="numeric" pattern="[0-9]*" oninput="otpBoxInput(this,3)" onkeydown="otpBoxKeydown(this,3)" onfocus="this.select()">
+      <input class="otp-box" id="ob4" type="tel" maxlength="1" inputmode="numeric" pattern="[0-9]*" oninput="otpBoxInput(this,4)" onkeydown="otpBoxKeydown(this,4)" onfocus="this.select()">
+      <input class="otp-box" id="ob5" type="tel" maxlength="1" inputmode="numeric" pattern="[0-9]*" oninput="otpBoxInput(this,5)" onkeydown="otpBoxKeydown(this,5)" onfocus="this.select()">
+    </div>
+    <div style="font-size:14px;color:var(--green-dark);font-family:'Noto Serif Bengali';text-align:center;background:var(--green-pale);padding:12px;border-radius:10px;">
+      ডেমো OTP: <strong>৪৯২১৩৫</strong>
+    </div>
+    <div class="otp-timer-card">
+      <div class="otp-timer-row">
+        <span class="otp-timer-label">সময় বাকি আছে</span>
+        <span class="otp-timer-count" id="otp-timer">২:৫৯</span>
+      </div>
+      <div class="otp-timer-bar"><div class="otp-timer-fill" id="otp-fill" style="width:100%"></div></div>
+      <div class="otp-timer-note">⏰ বয়স্কদের জন্য দীর্ঘ সময় দেওয়া হয়েছে (৩ মিনিট)</div>
+    </div>
+    <div class="warning-card">
+      <div class="warning-title">⚠️ কাউকে এই কোড দেবেন না</div>
+      <div class="warning-text">ব্যাংক কর্মচারী এমনকি কখনো এই কোড চায় না। আপনার পরিবার বা বন্ধুদের কাছে শেয়ার করবেন না।</div>
+    </div>
+    <button class="btn-outline" onclick="resendOtp()">কোড পাননি? আবার পাঠান</button>
+  </div>
+
+  <!-- SUCCESS SCREEN -->
+  <div class="success-screen" id="success-screen">
+    <div class="success-icon">✓</div>
+    <div class="success-title" id="success-title">টাকা পাঠানো হয়েছে!</div>
+    <div class="success-body" id="success-body"></div>
+    <button class="btn-primary" onclick="closeSuccess()" style="width:100%;">হোমে ফিরুন</button>
+    <button class="btn-outline" id="refund-btn" onclick="showRefundConfirm()" style="display:none;margin-top:0;">৩০ মিনিটে ফেরত নিন</button>
+  </div>
+
+  <!-- CONTACT PICKER MODAL (প্রাপক বেছে নিন) -->
+  <div class="modal-overlay" id="contact-picker-modal" onclick="closeContactPicker(event)">
+    <div class="modal-sheet" onclick="event.stopPropagation()">
+      <div class="modal-title">প্রাপক বেছে নিন</div>
+
+      <!-- Manual number input box -->
+      <div class="manual-input-wrap">
+        <div class="manual-input-box" id="manual-number-box">
+          <span class="phone-prefix">+880</span>
+          <input type="tel" id="manual-phone-input" class="manual-phone-field" placeholder="01XXXXXXXXX" maxlength="11" inputmode="numeric" pattern="[0-9]*" oninput="onPhoneInput(this)" onkeydown="onPhoneKeydown(this)">
+        </div>
+        <div id="phone-validation-msg" class="phone-validation-msg"></div>
+        <button class="btn-primary" id="phone-confirm-btn" style="display:none;margin-top:10px;" onclick="confirmManualPhone()">এই নম্বরে পাঠান</button>
+      </div>
+
+      <!-- Saved contacts -->
+      <div style="font-family:'Noto Serif Bengali';font-size:13px;color:var(--text-mid);margin:12px 0 8px;">সংরক্ষিত যোগাযোগ</div>
+      <div class="contact-picker" id="contact-picker-list"></div>
+    </div>
+  </div>
+
+  <!-- CONTACTS MODAL (মানুষ button) -->
+  <div class="modal-overlay" id="contacts-modal" onclick="closeContactsModal(event)">
+    <div class="modal-sheet" onclick="event.stopPropagation()">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;">
+        <div class="modal-title" style="margin-bottom:0;">সংরক্ষিত যোগাযোগ</div>
+        <div class="add-contact-btn" onclick="showDummyToast()">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+        </div>
+      </div>
+      <div id="contacts-modal-list"></div>
+    </div>
+  </div>
+
+  <!-- BILL MODAL -->
+  <div class="modal-overlay" id="bill-modal" onclick="closeBillModal(event)">
+    <div class="modal-sheet" onclick="event.stopPropagation()">
+      <div class="modal-title" id="bill-modal-title">বিদ্যুৎ বিল</div>
+      <div style="margin-bottom:12px;">
+        <label class="form-label">মিটার/অ্যাকাউন্ট নম্বর</label>
+        <div class="form-input-numpad" id="bill-account-display" onclick="openBillAccountNumpad()">নম্বর দিন...</div>
+        <label class="form-label">পরিমাণ (৳)</label>
+        <div class="form-input-numpad" id="bill-amount-display" onclick="openBillAmountNumpad()">৫০০</div>
+      </div>
+      <div class="modal-actions">
+        <button class="btn-outline" onclick="closeBillModal()">বাতিল</button>
+        <button class="btn-primary" onclick="payBill()">পরিশোধ করুন</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- TUTORIAL MODAL -->
+  <div class="modal-overlay" id="tutorial-modal" onclick="closeTutorialModal(event)">
+    <div class="modal-sheet" onclick="event.stopPropagation()">
+      <div id="tutorial-content"></div>
+      <button class="btn-primary" onclick="closeTutorialModal()">বুঝেছি!</button>
+    </div>
+  </div>
+
+  <!-- REFUND CONFIRM -->
+  <div class="modal-overlay" id="refund-modal" onclick="closeRefundModal(event)">
+    <div class="modal-sheet" onclick="event.stopPropagation()">
+      <div class="modal-title">টাকা ফেরত নিন?</div>
+      <div class="modal-body" id="refund-modal-body"></div>
+      <div class="modal-actions">
+        <button class="btn-outline" onclick="closeRefundModal()">না</button>
+        <button class="btn-primary" onclick="confirmRefund()">হ্যাঁ, ফেরত নিন</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- GENERIC NUMPAD POPUP (for amount, phone, OTP, bill) -->
+  <div class="numpad-overlay" id="numpad-overlay" onclick="closeNumpadOverlay(event)">
+    <div class="numpad-popup" onclick="event.stopPropagation()">
+      <div class="numpad-header">
+        <div class="numpad-title" id="numpad-title">পরিমাণ লিখুন</div>
+        <div class="numpad-display" id="numpad-display">০</div>
+      </div>
+      <div class="numpad-grid">
+        <div class="key-btn" onclick="numpadKey('১')">১</div>
+        <div class="key-btn" onclick="numpadKey('২')">২</div>
+        <div class="key-btn" onclick="numpadKey('৩')">৩</div>
+        <div class="key-btn" onclick="numpadKey('৪')">৪</div>
+        <div class="key-btn" onclick="numpadKey('৫')">৫</div>
+        <div class="key-btn" onclick="numpadKey('৬')">৬</div>
+        <div class="key-btn" onclick="numpadKey('৭')">৭</div>
+        <div class="key-btn" onclick="numpadKey('৮')">৮</div>
+        <div class="key-btn" onclick="numpadKey('৯')">৯</div>
+        <div class="key-btn empty"></div>
+        <div class="key-btn" onclick="numpadKey('০')">০</div>
+        <div class="key-btn del" onclick="numpadDelete()">⌫</div>
+      </div>
+      <button class="btn-primary" style="margin-top:12px;" onclick="confirmNumpad()">নিশ্চিত করুন</button>
+    </div>
+  </div>
+
+  <!-- TOAST -->
+  <div class="toast" id="toast"></div>
+  <div class="error-toast" id="error-toast"></div>
+  <div class="dummy-toast" id="dummy-toast">এটি পরীক্ষামূলক। এখনো কাজ করছে না।</div>
+</div>
+
+<script src="amar-bank.js"></script>
+</body>
+</html>

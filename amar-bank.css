@@ -1,0 +1,1856 @@
+/* ============ ROOT VARIABLES ============ */
+:root {
+  --green-dark: #1a3d2e;
+  --green-mid: #2d5a3d;
+  --green-light: #c8e6c9;
+  --green-pale: #e8f5e9;
+  --teal-circle: #a8d5b5;
+  --yellow-circle: #f5d98a;
+  --red-circle: #f5c5c0;
+  --purple-circle: #d4cce8;
+  --bg: #f0ede8;
+  --card-bg: #ffffff;
+  --text-dark: #1a1a1a;
+  --text-mid: #5a5a4a;
+  --text-light: #9a9a8a;
+  --border: #e0ddd8;
+  --warning-bg: #fef9e8;
+  --warning-border: #f5d98a;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  -webkit-tap-highlight-color: transparent;
+}
+
+body {
+  font-family: "Hind Siliguri", sans-serif;
+  background: #1a1a1a;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  overflow: hidden;
+}
+
+/* ============ TIRO BANGLA FONT FOR PHONE NUMBERS ============ */
+.tiro-phone {
+  font-family: "Tiro Bangla", "Hind Siliguri", serif;
+  font-size: 14px;
+  color: var(--text-mid);
+  letter-spacing: 0.3px;
+}
+
+/* ============ DESKTOP OVERLAY ============ */
+#desktop-overlay {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: #0d0d0d;
+  z-index: 9999;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  gap: 24px;
+  color: white;
+  text-align: center;
+  padding: 40px;
+}
+#desktop-overlay .phone-icon {
+  font-size: 80px;
+  animation: sway 2s ease-in-out infinite;
+}
+@keyframes sway {
+  0%,
+  100% {
+    transform: rotate(-10deg);
+  }
+  50% {
+    transform: rotate(10deg);
+  }
+}
+#desktop-overlay h2 {
+  font-size: 28px;
+  font-family: "Hind Siliguri";
+  font-weight: 600;
+  color: #a8d5b5;
+}
+#desktop-overlay p {
+  font-size: 16px;
+  color: #888;
+  max-width: 360px;
+  line-height: 1.6;
+}
+
+/* ============ FULLSCREEN PROMPT ============ */
+#fullscreen-prompt {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(10, 30, 20, 0.97);
+  z-index: 9998;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  gap: 20px;
+  color: white;
+  text-align: center;
+  padding: 30px;
+}
+#fullscreen-prompt .fs-icon {
+  font-size: 60px;
+  animation: pulse 1.5s ease-in-out infinite;
+}
+@keyframes pulse {
+  0%,
+  100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.1);
+  }
+}
+#fullscreen-prompt h2 {
+  font-size: 22px;
+  color: #a8d5b5;
+}
+#fullscreen-prompt p {
+  font-size: 14px;
+  color: #888;
+}
+#fs-btn {
+  margin-top: 10px;
+  background: var(--green-dark);
+  color: white;
+  border: none;
+  padding: 14px 40px;
+  border-radius: 50px;
+  font-size: 16px;
+  font-family: "Hind Siliguri";
+  cursor: pointer;
+}
+#fs-skip {
+  background: none;
+  border: 1px solid #444;
+  color: #888;
+  padding: 10px 30px;
+  border-radius: 50px;
+  font-family: "Hind Siliguri";
+  cursor: pointer;
+  font-size: 14px;
+}
+
+/* ============ APP SHELL ============ */
+#app {
+  width: 100%;
+  max-width: 430px;
+  height: 100dvh;
+  background: var(--bg);
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+/* ============ STATUS BAR ============ */
+.status-bar {
+  background: var(--bg);
+  padding: 12px 20px 6px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--text-dark);
+  flex-shrink: 0;
+}
+.status-right {
+  display: flex;
+  gap: 6px;
+  align-items: center;
+}
+
+/* ============ SCREENS ============ */
+.screen {
+  display: none;
+  flex-direction: column;
+  flex: 1;
+  overflow: hidden;
+  animation: fadeIn 0.3s ease;
+}
+.screen.active {
+  display: flex;
+}
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.scroll-area {
+  flex: 1;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+}
+.scroll-area::-webkit-scrollbar {
+  display: none;
+}
+
+/* ============ BOTTOM NAV ============ */
+.bottom-nav {
+  background: var(--card-bg);
+  border-top: 1px solid var(--border);
+  display: flex;
+  padding: 8px 0 20px;
+  flex-shrink: 0;
+}
+.nav-item {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  cursor: pointer;
+  padding: 6px 0;
+  transition: all 0.2s;
+}
+.nav-item svg {
+  width: 24px;
+  height: 24px;
+  stroke: var(--text-light);
+  fill: none;
+  stroke-width: 1.8;
+  transition: stroke 0.2s;
+}
+.nav-item span {
+  font-size: 11px;
+  color: var(--text-light);
+  transition: color 0.2s;
+}
+.nav-item.active svg {
+  stroke: var(--green-dark);
+}
+.nav-item.active span {
+  color: var(--green-dark);
+  font-weight: 600;
+}
+
+/* help icon fix - ensure question mark is visible */
+.nav-item .help-icon-circle {
+  width: 24px;
+  height: 24px;
+  background: var(--text-light);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.2s;
+}
+.nav-item.active .help-icon-circle {
+  background: var(--green-dark);
+}
+.nav-item .help-icon-circle span {
+  font-size: 14px;
+  font-weight: 800;
+  color: white;
+  line-height: 1;
+  font-family: serif;
+}
+
+/* ============ LOGIN SCREEN ============ */
+#login-screen .scroll-area {
+  padding: 20px;
+}
+
+.bank-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 24px;
+}
+.bank-logo-group {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.bank-logo {
+  width: 52px;
+  height: 52px;
+  background: var(--green-dark);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: "Noto Serif Bengali";
+  font-size: 22px;
+  color: white;
+  font-weight: 700;
+}
+.bank-name-block {
+  display: flex;
+  flex-direction: column;
+}
+.bank-name-bn {
+  font-family: "Noto Serif Bengali";
+  font-size: 22px;
+  font-weight: 700;
+  color: var(--text-dark);
+}
+.bank-name-en {
+  font-size: 13px;
+  color: var(--text-mid);
+}
+
+/* Info button - bigger, clearly visible i */
+.info-btn {
+  width: 46px;
+  height: 46px;
+  border: 2.5px solid var(--green-dark);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  background: var(--green-pale);
+  position: relative;
+  transition: background 0.2s;
+}
+.info-btn:active {
+  background: var(--teal-circle);
+}
+.info-btn svg {
+  width: 22px;
+  height: 22px;
+}
+
+.welcome-text {
+  text-align: center;
+  margin-bottom: 28px;
+}
+.welcome-bn {
+  font-family: "Noto Serif Bengali";
+  font-size: 17px;
+  color: var(--text-mid);
+}
+.welcome-en {
+  font-size: 13px;
+  color: var(--text-light);
+}
+
+.auth-card {
+  background: var(--card-bg);
+  border: 2px solid var(--green-dark);
+  border-radius: 20px;
+  padding: 28px 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  cursor: pointer;
+  margin-bottom: 14px;
+  transition:
+    transform 0.15s,
+    box-shadow 0.15s;
+}
+.auth-card:active {
+  transform: scale(0.98);
+}
+.auth-icon-circle {
+  width: 72px;
+  height: 72px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.auth-icon-circle svg {
+  width: 36px;
+  height: 36px;
+  stroke-width: 1.5;
+}
+.auth-title-bn {
+  font-family: "Noto Serif Bengali";
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--text-dark);
+}
+.auth-title-en {
+  font-size: 13px;
+  color: var(--text-mid);
+}
+
+.new-user-row {
+  display: flex;
+  justify-content: center;
+  margin: 16px 0 8px;
+}
+.new-user-text {
+  font-size: 13px;
+  color: var(--text-mid);
+  font-family: "Noto Serif Bengali";
+}
+
+/* Terms popup */
+#terms-popup {
+  display: none;
+  position: absolute;
+  top: 90px;
+  left: 20px;
+  right: 20px;
+  background: white;
+  border-radius: 16px;
+  padding: 20px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+  z-index: 100;
+  animation: popIn 0.2s ease;
+}
+@keyframes popIn {
+  from {
+    opacity: 0;
+    transform: scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+#terms-popup h3 {
+  font-family: "Noto Serif Bengali";
+  font-size: 16px;
+  margin-bottom: 12px;
+}
+#terms-popup ul {
+  list-style: disc;
+  padding-left: 18px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+#terms-popup ul li {
+  font-size: 13px;
+  color: var(--text-mid);
+  line-height: 1.5;
+  font-family: "Noto Serif Bengali";
+}
+#terms-overlay {
+  display: none;
+  position: absolute;
+  inset: 0;
+  z-index: 99;
+}
+
+/* ============ PIN SCREEN ============ */
+#pin-screen {
+  position: absolute;
+  inset: 0;
+  background: var(--bg);
+  z-index: 200;
+  display: none;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 40px 20px;
+  gap: 24px;
+  animation: fadeIn 0.3s ease;
+}
+#pin-screen.active {
+  display: flex;
+}
+.pin-title {
+  font-family: "Noto Serif Bengali";
+  font-size: 24px;
+  font-weight: 700;
+  color: var(--text-dark);
+  text-align: center;
+}
+.pin-subtitle {
+  font-size: 15px;
+  color: var(--text-mid);
+  text-align: center;
+  font-family: "Noto Serif Bengali";
+}
+.pin-dots {
+  display: flex;
+  gap: 16px;
+}
+.pin-dot {
+  width: 56px;
+  height: 68px;
+  border: 2px solid var(--green-dark);
+  border-radius: 14px;
+  background: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 26px;
+  font-weight: 700;
+  color: var(--green-dark);
+  font-family: "Noto Serif Bengali";
+  transition: background 0.15s;
+}
+.pin-dot.filled {
+  background: var(--green-pale);
+}
+.pin-dot.active {
+  border-color: var(--teal-circle);
+  background: #e8fff4;
+}
+.pin-keypad {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 12px;
+  width: 100%;
+  max-width: 300px;
+}
+.key-btn {
+  aspect-ratio: 1;
+  background: white;
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  font-size: 22px;
+  font-family: "Noto Serif Bengali";
+  font-weight: 600;
+  color: var(--text-dark);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition:
+    background 0.1s,
+    transform 0.1s;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+}
+.key-btn:active {
+  background: var(--green-pale);
+  transform: scale(0.95);
+}
+.key-btn.del {
+  background: var(--red-circle);
+  border-color: transparent;
+}
+.key-btn.empty {
+  background: transparent;
+  border: none;
+  box-shadow: none;
+  cursor: default;
+}
+.pin-error {
+  color: #c0392b;
+  font-size: 14px;
+  text-align: center;
+  font-family: "Noto Serif Bengali";
+}
+.pin-attempts {
+  color: var(--text-mid);
+  font-size: 13px;
+  text-align: center;
+  font-family: "Noto Serif Bengali";
+}
+
+/* ============ OTP SCREEN ============ */
+#otp-screen {
+  position: absolute;
+  inset: 0;
+  background: var(--bg);
+  z-index: 201;
+  display: none;
+  flex-direction: column;
+  padding: 40px 20px;
+  gap: 20px;
+  overflow-y: auto;
+  animation: fadeIn 0.3s ease;
+}
+#otp-screen.active {
+  display: flex;
+}
+.otp-back {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+}
+.otp-back svg {
+  width: 22px;
+  height: 22px;
+  stroke: var(--green-dark);
+  fill: none;
+}
+.otp-back span {
+  font-family: "Noto Serif Bengali";
+  font-size: 22px;
+  font-weight: 700;
+  color: var(--text-dark);
+}
+.otp-subtitle {
+  font-size: 15px;
+  color: var(--text-mid);
+  font-family: "Noto Serif Bengali";
+}
+.otp-phone-display {
+  font-family: "Noto Serif Bengali";
+  font-size: 22px;
+  font-weight: 700;
+  color: var(--green-dark);
+}
+.otp-boxes {
+  display: flex;
+  gap: 10px;
+  justify-content: center;
+  cursor: pointer;
+}
+.otp-box {
+  width: 50px;
+  height: 64px;
+  border: 2px solid var(--green-dark);
+  border-radius: 14px;
+  background: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 26px;
+  font-weight: 700;
+  font-family: "Noto Serif Bengali";
+  color: var(--green-dark);
+}
+.otp-box.empty-slot {
+  border-color: #ddd;
+  background: #f5f5f5;
+}
+.otp-timer-card {
+  background: var(--green-pale);
+  border: 2px solid var(--green-dark);
+  border-radius: 16px;
+  padding: 16px 20px;
+}
+.otp-timer-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.otp-timer-label {
+  font-family: "Noto Serif Bengali";
+  font-size: 15px;
+  color: var(--text-mid);
+}
+.otp-timer-count {
+  font-family: "Noto Serif Bengali";
+  font-size: 26px;
+  font-weight: 700;
+  color: var(--green-dark);
+}
+.otp-timer-bar {
+  height: 6px;
+  background: #ddd;
+  border-radius: 3px;
+  margin: 10px 0;
+  overflow: hidden;
+}
+.otp-timer-fill {
+  height: 100%;
+  background: var(--green-dark);
+  border-radius: 3px;
+  transition: width 1s linear;
+}
+.otp-timer-note {
+  font-size: 13px;
+  color: var(--text-mid);
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-family: "Noto Serif Bengali";
+}
+.warning-card {
+  background: var(--warning-bg);
+  border: 1px solid var(--warning-border);
+  border-radius: 14px;
+  padding: 14px 16px;
+}
+.warning-title {
+  font-family: "Noto Serif Bengali";
+  font-size: 15px;
+  font-weight: 700;
+  color: #8a6d00;
+  margin-bottom: 6px;
+}
+.warning-text {
+  font-size: 14px;
+  color: var(--text-mid);
+  line-height: 1.5;
+  font-family: "Noto Serif Bengali";
+}
+
+/* ============ BUTTONS ============ */
+.btn-primary {
+  width: 100%;
+  background: var(--green-dark);
+  color: white;
+  border: none;
+  border-radius: 50px;
+  padding: 16px;
+  font-size: 18px;
+  font-family: "Noto Serif Bengali";
+  font-weight: 600;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  transition: opacity 0.2s;
+}
+.btn-primary:active {
+  opacity: 0.85;
+}
+.btn-outline {
+  width: 100%;
+  background: transparent;
+  color: var(--green-dark);
+  border: 2px solid var(--green-dark);
+  border-radius: 50px;
+  padding: 14px;
+  font-size: 16px;
+  font-family: "Noto Serif Bengali";
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+.btn-outline:active {
+  background: var(--green-pale);
+}
+.open-account-note {
+  text-align: center;
+  font-size: 12px;
+  color: var(--text-light);
+  font-family: "Noto Serif Bengali";
+  margin-top: 6px;
+}
+
+/* ============ HOME SCREEN ============ */
+#home-screen .scroll-area {
+  padding: 0 0 20px;
+}
+.home-top {
+  padding: 16px 20px 12px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.home-greeting-name {
+  font-family: "Noto Serif Bengali";
+  font-size: 26px;
+  font-weight: 700;
+  color: var(--text-dark);
+}
+.home-greeting-en {
+  font-size: 13px;
+  color: var(--text-mid);
+}
+.mic-btn {
+  width: 48px;
+  height: 48px;
+  background: var(--green-dark);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  border: none;
+}
+.mic-btn svg {
+  width: 22px;
+  height: 22px;
+  stroke: white;
+  fill: none;
+}
+.balance-card {
+  margin: 0 16px;
+  background: var(--green-dark);
+  border-radius: 20px;
+  padding: 20px 24px;
+  cursor: pointer;
+  position: relative;
+  overflow: hidden;
+}
+.balance-card::before {
+  content: "";
+  position: absolute;
+  width: 180px;
+  height: 180px;
+  background: rgba(255, 255, 255, 0.04);
+  border-radius: 50%;
+  top: -60px;
+  right: -40px;
+}
+.balance-label {
+  font-size: 13px;
+  color: rgba(255, 255, 255, 0.6);
+  margin-bottom: 8px;
+  font-family: "Noto Serif Bengali";
+}
+.balance-amount {
+  font-family: "Noto Serif Bengali";
+  font-size: 38px;
+  font-weight: 700;
+  color: white;
+}
+.learn-btn {
+  margin: 14px 16px 0;
+  background: var(--green-pale);
+  border: 2px dashed var(--green-dark);
+  border-radius: 50px;
+  padding: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  cursor: pointer;
+  font-family: "Noto Serif Bengali";
+  font-size: 16px;
+  color: var(--green-dark);
+  font-weight: 600;
+  transition: background 0.2s;
+}
+.learn-btn:active {
+  background: var(--teal-circle);
+}
+.quick-actions {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+  padding: 14px 16px 0;
+}
+.action-card {
+  background: white;
+  border-radius: 20px;
+  padding: 20px 16px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  cursor: pointer;
+  transition:
+    transform 0.15s,
+    box-shadow 0.15s;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+}
+.action-card:active {
+  transform: scale(0.97);
+}
+.action-icon {
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.action-icon svg {
+  width: 28px;
+  height: 28px;
+  fill: none;
+  stroke-width: 1.8;
+}
+.action-label {
+  font-family: "Noto Serif Bengali";
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--text-dark);
+  text-align: center;
+}
+.security-note {
+  margin: 14px 16px 0;
+  background: var(--warning-bg);
+  border-radius: 14px;
+  padding: 12px 16px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.security-note svg {
+  width: 22px;
+  height: 22px;
+  flex-shrink: 0;
+}
+.security-text-bn {
+  font-family: "Noto Serif Bengali";
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text-dark);
+}
+.security-text-en {
+  font-size: 11px;
+  color: var(--text-mid);
+}
+
+/* ============ TRANSACTION LIST ============ */
+.section-title {
+  padding: 16px 20px 8px;
+  font-family: "Noto Serif Bengali";
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--text-mid);
+}
+.txn-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 20px;
+  border-bottom: 1px solid var(--border);
+  cursor: pointer;
+  transition: background 0.15s;
+}
+.txn-item:active {
+  background: var(--green-pale);
+}
+.txn-avatar {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  background: var(--teal-circle);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: "Noto Serif Bengali";
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--green-dark);
+  flex-shrink: 0;
+}
+.txn-info {
+  flex: 1;
+}
+.txn-name {
+  font-family: "Noto Serif Bengali";
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--text-dark);
+}
+.txn-time {
+  font-size: 12px;
+  color: var(--text-light);
+}
+.txn-amount {
+  font-family: "Noto Serif Bengali";
+  font-size: 16px;
+  font-weight: 700;
+}
+.txn-amount.debit {
+  color: #c0392b;
+}
+.txn-amount.credit {
+  color: #27ae60;
+}
+
+/* ============ HISHAB TABS ============ */
+.hishab-tabs {
+  display: flex;
+  background: var(--card-bg);
+  border-bottom: 1px solid var(--border);
+  flex-shrink: 0;
+}
+.hishab-tab {
+  flex: 1;
+  padding: 14px 8px;
+  text-align: center;
+  font-family: "Noto Serif Bengali";
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--text-light);
+  cursor: pointer;
+  border-bottom: 3px solid transparent;
+  transition: all 0.2s;
+}
+.hishab-tab.active {
+  color: var(--green-dark);
+  border-bottom-color: var(--green-dark);
+}
+
+/* ============ SEND MONEY SCREEN ============ */
+.screen-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 14px 16px;
+}
+.back-btn {
+  width: 36px;
+  height: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+}
+.back-btn svg {
+  width: 22px;
+  height: 22px;
+  stroke: var(--text-dark);
+  fill: none;
+  stroke-width: 2;
+}
+.screen-title {
+  font-family: "Noto Serif Bengali";
+  font-size: 24px;
+  font-weight: 700;
+  color: var(--text-dark);
+}
+
+.contact-select-card {
+  background: white;
+  border-radius: 16px;
+  padding: 16px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 16px;
+  cursor: pointer;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+}
+.contact-avatar-sm {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  background: var(--teal-circle);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: "Noto Serif Bengali";
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--green-dark);
+}
+.contact-info {
+  flex: 1;
+}
+.contact-name {
+  font-family: "Noto Serif Bengali";
+  font-size: 16px;
+  font-weight: 700;
+}
+.contact-select-card svg {
+  width: 18px;
+  height: 18px;
+  stroke: var(--text-light);
+  fill: none;
+}
+
+.amount-label {
+  font-family: "Noto Serif Bengali";
+  font-size: 14px;
+  color: var(--text-mid);
+  margin-bottom: 10px;
+}
+.amount-card {
+  background: white;
+  border: 2px solid var(--green-dark);
+  border-radius: 16px;
+  padding: 20px 16px;
+  margin-bottom: 16px;
+}
+.amount-display {
+  font-family: "Noto Serif Bengali";
+  font-size: 36px;
+  font-weight: 700;
+  color: var(--green-dark);
+  margin-bottom: 14px;
+  border-bottom: 2px dashed var(--teal-circle);
+  padding-bottom: 10px;
+}
+.preset-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+}
+.preset-btn {
+  background: #f0ede8;
+  border: none;
+  border-radius: 12px;
+  padding: 14px;
+  cursor: pointer;
+  transition: background 0.15s;
+}
+.preset-btn:active {
+  background: var(--teal-circle);
+}
+.preset-btn.selected {
+  background: var(--teal-circle);
+}
+.preset-amount {
+  font-family: "Noto Serif Bengali";
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--text-dark);
+}
+.preset-en {
+  font-size: 12px;
+  color: var(--text-mid);
+}
+.review-card {
+  background: #f5f3ef;
+  border-radius: 16px;
+  padding: 16px 20px;
+  margin-bottom: 16px;
+}
+.review-title {
+  font-family: "Noto Serif Bengali";
+  font-size: 15px;
+  font-weight: 700;
+  margin-bottom: 12px;
+}
+.review-row {
+  display: flex;
+  justify-content: space-between;
+  padding: 6px 0;
+  border-bottom: 1px solid var(--border);
+}
+.review-row:last-child {
+  border-bottom: none;
+  font-weight: 700;
+}
+.review-key {
+  font-size: 13px;
+  color: var(--text-mid);
+  font-family: "Noto Serif Bengali";
+}
+.review-val {
+  font-size: 13px;
+  font-family: "Noto Serif Bengali";
+  font-weight: 600;
+  color: var(--text-dark);
+}
+
+/* ============ QR / RECEIVE SCREEN ============ */
+.qr-card {
+  background: white;
+  border-radius: 20px;
+  padding: 24px;
+  margin: 0 16px 16px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
+}
+.qr-svg {
+  width: 160px;
+  height: 160px;
+}
+.qr-name {
+  font-family: "Noto Serif Bengali";
+  font-size: 20px;
+  font-weight: 700;
+}
+/* Bigger phone number above QR */
+.qr-phone {
+  font-family: "Tiro Bangla", "Noto Serif Bengali", serif;
+  font-size: 18px;
+  font-weight: 600;
+  color: var(--green-dark);
+  letter-spacing: 0.5px;
+}
+
+/* ============ BILLS ============ */
+#bills-screen .scroll-area {
+  padding: 0;
+}
+.bill-category {
+  background: white;
+  border-radius: 14px;
+  padding: 16px;
+  margin: 0 16px 10px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  cursor: pointer;
+  box-shadow: 0 1px 6px rgba(0, 0, 0, 0.05);
+  transition: transform 0.15s;
+}
+.bill-category:active {
+  transform: scale(0.98);
+}
+.bill-icon {
+  width: 48px;
+  height: 48px;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 22px;
+}
+.bill-name {
+  font-family: "Noto Serif Bengali";
+  font-size: 15px;
+  font-weight: 600;
+}
+.bill-en {
+  font-size: 12px;
+  color: var(--text-mid);
+}
+
+/* ============ HELP ============ */
+#help-screen .scroll-area {
+  padding: 0 0 20px;
+}
+.tutorial-card {
+  background: white;
+  border-radius: 14px;
+  padding: 16px;
+  margin: 0 16px 10px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  cursor: pointer;
+  box-shadow: 0 1px 6px rgba(0, 0, 0, 0.05);
+  transition: background 0.15s;
+}
+.tutorial-card:active {
+  background: var(--green-pale);
+}
+.tutorial-play {
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+.tutorial-play svg {
+  width: 24px;
+  height: 24px;
+  fill: none;
+  stroke-width: 2;
+}
+.tutorial-title {
+  font-family: "Noto Serif Bengali";
+  font-size: 15px;
+  font-weight: 700;
+}
+.tutorial-en {
+  font-size: 12px;
+  color: var(--text-mid);
+}
+.helpline-btn {
+  background: var(--green-dark);
+  border-radius: 14px;
+  padding: 16px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  cursor: pointer;
+  margin-bottom: 10px;
+}
+.helpline-btn svg {
+  width: 28px;
+  height: 28px;
+  stroke: white;
+  fill: none;
+}
+.helpline-text {
+  color: white;
+}
+.helpline-label {
+  font-size: 12px;
+  opacity: 0.7;
+  font-family: "Noto Serif Bengali";
+}
+.helpline-num {
+  font-family: "Noto Serif Bengali";
+  font-size: 22px;
+  font-weight: 700;
+}
+.faq-item {
+  background: white;
+  border-radius: 12px;
+  padding: 14px 16px;
+  margin-bottom: 8px;
+  cursor: pointer;
+}
+.faq-q {
+  font-family: "Noto Serif Bengali";
+  font-size: 14px;
+  font-weight: 700;
+}
+.faq-a {
+  font-size: 13px;
+  color: var(--text-mid);
+  margin-top: 4px;
+  font-family: "Noto Serif Bengali";
+  display: none;
+}
+.faq-a.open {
+  display: block;
+}
+
+/* ============ PROFILE ============ */
+#profile-screen .scroll-area {
+  padding: 0 16px 20px;
+}
+.profile-section-title {
+  font-family: "Noto Serif Bengali";
+  font-size: 20px;
+  font-weight: 700;
+  padding: 16px 0 4px;
+}
+.profile-sub {
+  font-size: 13px;
+  color: var(--text-mid);
+  padding-bottom: 12px;
+  font-family: "Noto Serif Bengali";
+}
+.toggle-item {
+  background: white;
+  border-radius: 14px;
+  padding: 14px 16px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 10px;
+}
+.toggle-icon-wrap {
+  width: 44px;
+  height: 44px;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.toggle-icon-wrap svg {
+  width: 22px;
+  height: 22px;
+  fill: none;
+  stroke-width: 1.8;
+}
+.toggle-labels {
+  flex: 1;
+}
+.toggle-name {
+  font-family: "Noto Serif Bengali";
+  font-size: 15px;
+  font-weight: 600;
+}
+.toggle-en {
+  font-size: 12px;
+  color: var(--text-mid);
+}
+.toggle-switch {
+  width: 52px;
+  height: 28px;
+  background: #ddd;
+  border-radius: 14px;
+  position: relative;
+  cursor: pointer;
+  transition: background 0.25s;
+  flex-shrink: 0;
+}
+.toggle-switch.on {
+  background: var(--green-dark);
+}
+.toggle-switch::after {
+  content: "";
+  position: absolute;
+  width: 22px;
+  height: 22px;
+  background: white;
+  border-radius: 50%;
+  top: 3px;
+  left: 3px;
+  transition: left 0.25s;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.2);
+}
+.toggle-switch.on::after {
+  left: 27px;
+}
+.settings-title {
+  font-family: "Noto Serif Bengali";
+  font-size: 14px;
+  color: var(--text-mid);
+  padding: 8px 0;
+}
+.settings-item {
+  background: white;
+  border-radius: 14px;
+  padding: 14px 16px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 10px;
+  cursor: pointer;
+}
+.settings-item svg {
+  width: 22px;
+  height: 22px;
+  stroke: var(--text-mid);
+  fill: none;
+}
+.settings-label {
+  flex: 1;
+}
+.settings-name {
+  font-family: "Noto Serif Bengali";
+  font-size: 15px;
+  font-weight: 600;
+}
+.settings-en {
+  font-size: 12px;
+  color: var(--text-mid);
+}
+.logout-btn {
+  width: 100%;
+  background: transparent;
+  border: 2px solid #e8a0a0;
+  color: #c0392b;
+  border-radius: 50px;
+  padding: 14px;
+  font-family: "Noto Serif Bengali";
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  margin-top: 8px;
+  transition: background 0.2s;
+}
+.logout-btn:active {
+  background: #fff0f0;
+}
+
+/* ============ MODALS & OVERLAYS ============ */
+.modal-overlay {
+  display: none;
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.5);
+  z-index: 300;
+  justify-content: center;
+  align-items: flex-end;
+}
+.modal-overlay.active {
+  display: flex;
+}
+.modal-sheet {
+  background: white;
+  border-radius: 24px 24px 0 0;
+  padding: 24px 20px 36px;
+  width: 100%;
+  animation: slideUp 0.3s ease;
+  max-height: 80vh;
+  overflow-y: auto;
+}
+@keyframes slideUp {
+  from {
+    transform: translateY(100%);
+  }
+  to {
+    transform: translateY(0);
+  }
+}
+.modal-title {
+  font-family: "Noto Serif Bengali";
+  font-size: 20px;
+  font-weight: 700;
+  margin-bottom: 12px;
+}
+.modal-body {
+  font-size: 14px;
+  color: var(--text-mid);
+  line-height: 1.7;
+  font-family: "Noto Serif Bengali";
+}
+.modal-actions {
+  display: flex;
+  gap: 10px;
+  margin-top: 20px;
+}
+.modal-actions button {
+  flex: 1;
+}
+
+/* ============ CONTACT PICKER ============ */
+.manual-input-wrap {
+  margin-bottom: 8px;
+}
+.manual-input-box {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: var(--bg);
+  border: 2px solid var(--green-dark);
+  border-radius: 14px;
+  padding: 14px 16px;
+  cursor: pointer;
+  transition: background 0.15s;
+}
+.manual-input-box:active {
+  background: var(--green-pale);
+}
+.manual-input-placeholder {
+  font-family: "Noto Serif Bengali";
+  font-size: 15px;
+  color: var(--text-mid);
+}
+
+.contact-pick-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px;
+  background: var(--bg);
+  border-radius: 12px;
+  margin-bottom: 8px;
+  cursor: pointer;
+  transition: background 0.15s;
+}
+.contact-pick-item:active {
+  background: var(--green-pale);
+}
+.cp-avatar {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: "Noto Serif Bengali";
+  font-size: 16px;
+  font-weight: 700;
+}
+.cp-name {
+  font-family: "Noto Serif Bengali";
+  font-size: 15px;
+  font-weight: 600;
+}
+.cp-phone {
+  font-size: 12px;
+  color: var(--text-mid);
+  font-family: "Tiro Bangla", serif;
+}
+
+/* Add contact button in contacts modal */
+.add-contact-btn {
+  width: 38px;
+  height: 38px;
+  background: var(--green-dark);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  flex-shrink: 0;
+}
+
+/* ============ FORM INPUTS (NUMPAD STYLE) ============ */
+.form-label {
+  font-family: "Noto Serif Bengali";
+  font-size: 14px;
+  color: var(--text-mid);
+  margin-bottom: 6px;
+  display: block;
+}
+.form-input-numpad {
+  width: 100%;
+  padding: 13px 14px;
+  border: 1.5px solid var(--border);
+  border-radius: 10px;
+  font-family: "Noto Serif Bengali";
+  font-size: 15px;
+  color: var(--text-dark);
+  background: var(--bg);
+  margin-bottom: 12px;
+  cursor: pointer;
+  transition: border-color 0.2s;
+}
+.form-input-numpad:active {
+  border-color: var(--green-dark);
+}
+
+/* ============ GENERIC NUMPAD POPUP ============ */
+.numpad-overlay {
+  display: none;
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.5);
+  z-index: 400;
+  justify-content: center;
+  align-items: flex-end;
+}
+.numpad-overlay.active {
+  display: flex;
+}
+.numpad-popup {
+  background: white;
+  border-radius: 24px 24px 0 0;
+  padding: 20px 20px 36px;
+  width: 100%;
+  animation: slideUp 0.3s ease;
+}
+.numpad-header {
+  margin-bottom: 16px;
+}
+.numpad-title {
+  font-family: "Noto Serif Bengali";
+  font-size: 14px;
+  color: var(--text-mid);
+  margin-bottom: 8px;
+}
+.numpad-display {
+  font-family: "Noto Serif Bengali";
+  font-size: 32px;
+  font-weight: 700;
+  color: var(--green-dark);
+  border-bottom: 2px solid var(--green-dark);
+  padding-bottom: 8px;
+  min-height: 52px;
+}
+.numpad-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 10px;
+}
+
+/* ============ SUCCESS SCREEN ============ */
+.success-screen {
+  position: absolute;
+  inset: 0;
+  background: var(--bg);
+  z-index: 250;
+  display: none;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 20px;
+  padding: 40px;
+  text-align: center;
+  animation: fadeIn 0.3s ease;
+}
+.success-screen.active {
+  display: flex;
+}
+.success-icon {
+  width: 96px;
+  height: 96px;
+  background: var(--teal-circle);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 48px;
+  animation: bounceIn 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+@keyframes bounceIn {
+  from {
+    transform: scale(0);
+  }
+  to {
+    transform: scale(1);
+  }
+}
+.success-title {
+  font-family: "Noto Serif Bengali";
+  font-size: 26px;
+  font-weight: 700;
+  color: var(--green-dark);
+}
+.success-body {
+  font-size: 14px;
+  color: var(--text-mid);
+  font-family: "Noto Serif Bengali";
+  line-height: 1.6;
+}
+
+/* ============ TUTORIAL MODAL ============ */
+.tutorial-modal {
+  padding: 8px 0;
+}
+.tutorial-step {
+  background: var(--green-pale);
+  border-radius: 12px;
+  padding: 14px;
+  margin-bottom: 10px;
+}
+.tutorial-step-num {
+  font-size: 11px;
+  color: var(--green-dark);
+  font-weight: 700;
+  margin-bottom: 4px;
+}
+.tutorial-step-text {
+  font-family: "Noto Serif Bengali";
+  font-size: 14px;
+  color: var(--text-dark);
+  line-height: 1.5;
+}
+
+/* ============ TOAST ============ */
+.toast {
+  position: absolute;
+  bottom: 100px;
+  left: 20px;
+  right: 20px;
+  background: #1a3d2e;
+  color: white;
+  padding: 14px 18px;
+  border-radius: 14px;
+  font-family: "Noto Serif Bengali";
+  font-size: 14px;
+  z-index: 500;
+  text-align: center;
+  animation: toastIn 0.3s ease;
+  display: none;
+}
+@keyframes toastIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+.error-toast {
+  position: absolute;
+  bottom: 100px;
+  left: 20px;
+  right: 20px;
+  background: #c0392b;
+  color: white;
+  padding: 14px 18px;
+  border-radius: 14px;
+  font-family: "Noto Serif Bengali";
+  font-size: 14px;
+  z-index: 500;
+  text-align: center;
+  animation: toastIn 0.3s ease;
+  display: none;
+}
+.dummy-toast {
+  position: absolute;
+  bottom: 100px;
+  left: 20px;
+  right: 20px;
+  background: #6b4c00;
+  color: #fff9e0;
+  padding: 14px 18px;
+  border-radius: 14px;
+  font-family: "Noto Serif Bengali";
+  font-size: 15px;
+  z-index: 500;
+  text-align: center;
+  animation: toastIn 0.3s ease;
+  display: none;
+}
+
+/* ============ INLINE AMOUNT INPUT ============ */
+.amount-input-wrap {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 16px;
+  padding: 4px 0 10px;
+  border-bottom: 2.5px solid var(--green-dark);
+}
+.amount-currency-symbol {
+  font-family: "Noto Serif Bengali";
+  font-size: 32px;
+  font-weight: 700;
+  color: var(--green-dark);
+  line-height: 1;
+}
+.amount-input-field {
+  flex: 1;
+  font-family: "Noto Serif Bengali";
+  font-size: 36px;
+  font-weight: 700;
+  color: var(--green-dark);
+  background: transparent;
+  border: none;
+  outline: none;
+  padding: 0;
+  min-width: 0;
+  caret-color: var(--green-dark);
+  -webkit-appearance: none;
+  -webkit-appearance: none;
+  appearance: none;
+}
+.amount-input-field::-webkit-outer-spin-button,
+.amount-input-field::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+/* ============ OTP INLINE INPUT BOXES ============ */
+.otp-box {
+  width: 44px;
+  height: 54px;
+  border: 2px solid var(--border);
+  border-radius: 12px;
+  background: var(--bg);
+  font-family: "Noto Serif Bengali";
+  font-size: 22px;
+  font-weight: 700;
+  color: var(--green-dark);
+  text-align: center;
+  outline: none;
+  transition: border-color 0.2s;
+  -webkit-appearance: none;
+  appearance: none;
+  caret-color: transparent;
+}
+.otp-box:focus {
+  border-color: var(--green-dark);
+  background: white;
+  box-shadow: 0 0 0 3px rgba(26, 61, 46, 0.12);
+}
+.otp-box:not(:placeholder-shown) {
+  border-color: var(--green-mid);
+  background: var(--green-pale);
+}
+
+/* ============ PHONE INPUT IN CONTACT PICKER ============ */
+.manual-input-box {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: var(--bg);
+  border: 2px solid var(--green-dark);
+  border-radius: 14px;
+  padding: 12px 16px;
+}
+.phone-prefix {
+  font-family: "Tiro Bangla", serif;
+  font-size: 16px;
+  color: var(--text-mid);
+  flex-shrink: 0;
+}
+.manual-phone-field {
+  flex: 1;
+  background: transparent;
+  border: none;
+  outline: none;
+  font-family: "Tiro Bangla", serif;
+  font-size: 17px;
+  color: var(--text-dark);
+  -webkit-appearance: none;
+  appearance: none;
+  padding: 0;
+  caret-color: var(--green-dark);
+}
+.manual-phone-field::placeholder {
+  color: var(--text-light);
+  font-size: 15px;
+}
+.phone-validation-msg {
+  font-family: "Noto Serif Bengali";
+  font-size: 13px;
+  padding: 4px 4px 0;
+  min-height: 18px;
+}
