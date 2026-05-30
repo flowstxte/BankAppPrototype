@@ -523,7 +523,7 @@ function updateHomeActions() {
     .map((key) => {
       const a = ACTION_DEFS[key];
       return `<div class="action-card" onclick="${a.action}">
-      <div class="action-icon" style="background:${a.color};${a.label === "নিন" ? "margin-bottom:12px" : ""}">
+      <div class="action-icon" style="background:${a.color}">
         <svg viewBox="0 0 24 24" style="stroke:${a.iconStroke}">${a.icon}</svg>
       </div>
       <span class="action-label">${a.label}</span>
