@@ -1446,7 +1446,7 @@ body {
   padding: 24px 20px 36px;
   width: 100%;
   animation: slideUp 0.3s ease;
-  min-height: 80vh;
+  min-height: 70vh;
   max-height: 90vh;
   overflow-y: auto;
 }
