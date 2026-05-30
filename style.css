@@ -38,7 +38,7 @@ body {
 /* ============ TIRO BANGLA FONT FOR PHONE NUMBERS ============ */
 .tiro-phone {
   font-family: "Tiro Bangla", "Hind Siliguri", serif;
-  font-size: 14px;
+  font-size: 17px;
   color: var(--text-mid);
   letter-spacing: 0.3px;
 }
@@ -231,7 +231,7 @@ body {
   transition: stroke 0.2s;
 }
 .nav-item span {
-  font-size: 11px;
+  font-size: 14px;
   color: var(--text-light);
   transition: color 0.2s;
 }
@@ -305,7 +305,7 @@ body {
   color: var(--text-dark);
 }
 .bank-name-en {
-  font-size: 13px;
+  font-size: 15px;
   color: var(--text-mid);
 }
 
@@ -337,11 +337,11 @@ body {
 }
 .welcome-bn {
   font-family: "Noto Serif Bengali";
-  font-size: 17px;
+  font-size: 20px;
   color: var(--text-mid);
 }
 .welcome-en {
-  font-size: 13px;
+  font-size: 16px;
   color: var(--text-light);
 }
 
@@ -378,12 +378,12 @@ body {
 }
 .auth-title-bn {
   font-family: "Noto Serif Bengali";
-  font-size: 18px;
+  font-size: 21px;
   font-weight: 700;
   color: var(--text-dark);
 }
 .auth-title-en {
-  font-size: 13px;
+  font-size: 15px;
   color: var(--text-mid);
 }
 
@@ -393,7 +393,7 @@ body {
   margin: 16px 0 8px;
 }
 .new-user-text {
-  font-size: 13px;
+  font-size: 16px;
   color: var(--text-mid);
   font-family: "Noto Serif Bengali";
 }
@@ -472,7 +472,7 @@ body {
   text-align: center;
 }
 .pin-subtitle {
-  font-size: 15px;
+  font-size: 18px;
   color: var(--text-mid);
   text-align: center;
   font-family: "Noto Serif Bengali";
@@ -544,13 +544,13 @@ body {
 }
 .pin-error {
   color: #c0392b;
-  font-size: 14px;
+  font-size: 17px;
   text-align: center;
   font-family: "Noto Serif Bengali";
 }
 .pin-attempts {
   color: var(--text-mid);
-  font-size: 13px;
+  font-size: 16px;
   text-align: center;
   font-family: "Noto Serif Bengali";
 }
@@ -590,7 +590,7 @@ body {
   color: var(--text-dark);
 }
 .otp-subtitle {
-  font-size: 15px;
+  font-size: 18px;
   color: var(--text-mid);
   font-family: "Noto Serif Bengali";
 }
@@ -637,7 +637,7 @@ body {
 }
 .otp-timer-label {
   font-family: "Noto Serif Bengali";
-  font-size: 15px;
+  font-size: 18px;
   color: var(--text-mid);
 }
 .otp-timer-count {
@@ -660,7 +660,7 @@ body {
   transition: width 1s linear;
 }
 .otp-timer-note {
-  font-size: 13px;
+  font-size: 16px;
   color: var(--text-mid);
   display: flex;
   align-items: center;
@@ -675,13 +675,13 @@ body {
 }
 .warning-title {
   font-family: "Noto Serif Bengali";
-  font-size: 15px;
+  font-size: 18px;
   font-weight: 700;
   color: #8a6d00;
   margin-bottom: 6px;
 }
 .warning-text {
-  font-size: 14px;
+  font-size: 17px;
   color: var(--text-mid);
   line-height: 1.5;
   font-family: "Noto Serif Bengali";
@@ -715,7 +715,7 @@ body {
   border: 2px solid var(--green-dark);
   border-radius: 50px;
   padding: 14px;
-  font-size: 16px;
+  font-size: 19px;
   font-family: "Noto Serif Bengali";
   font-weight: 600;
   cursor: pointer;
@@ -726,7 +726,7 @@ body {
 }
 .open-account-note {
   text-align: center;
-  font-size: 12px;
+  font-size: 15px;
   color: var(--text-light);
   font-family: "Noto Serif Bengali";
   margin-top: 6px;
@@ -749,7 +749,7 @@ body {
   color: var(--text-dark);
 }
 .home-greeting-en {
-  font-size: 13px;
+  font-size: 16px;
   color: var(--text-mid);
 }
 .mic-btn {
@@ -789,7 +789,7 @@ body {
   right: -40px;
 }
 .balance-label {
-  font-size: 13px;
+  font-size: 16px;
   color: rgba(255, 255, 255, 0.6);
   margin-bottom: 8px;
   font-family: "Noto Serif Bengali";
@@ -833,7 +833,8 @@ body {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 12px;
+  text-align: center;
+  gap: 16px;
   cursor: pointer;
   transition:
     transform 0.15s,
@@ -850,6 +851,7 @@ body {
   display: flex;
   align-items: center;
   justify-content: center;
+  margin: 0 auto;
 }
 .action-icon svg {
   width: 28px;
@@ -859,10 +861,11 @@ body {
 }
 .action-label {
   font-family: "Noto Serif Bengali";
-  font-size: 15px;
+  font-size: 18px;
   font-weight: 600;
   color: var(--text-dark);
   text-align: center;
+  width: 100%;
 }
 .security-note {
   margin: 14px 16px 0;
@@ -880,12 +883,12 @@ body {
 }
 .security-text-bn {
   font-family: "Noto Serif Bengali";
-  font-size: 13px;
+  font-size: 16px;
   font-weight: 600;
   color: var(--text-dark);
 }
 .security-text-en {
-  font-size: 11px;
+  font-size: 14px;
   color: var(--text-mid);
 }
 
@@ -893,7 +896,7 @@ body {
 .section-title {
   padding: 16px 20px 8px;
   font-family: "Noto Serif Bengali";
-  font-size: 16px;
+  font-size: 22px;
   font-weight: 700;
   color: var(--text-mid);
 }
@@ -928,17 +931,18 @@ body {
 }
 .txn-name {
   font-family: "Noto Serif Bengali";
-  font-size: 14px;
+  font-size: 17px;
   font-weight: 600;
   color: var(--text-dark);
 }
 .txn-time {
-  font-size: 12px;
+  font-size: 18px;
   color: var(--text-light);
+  font-family: "Noto Serif Bengali";
 }
 .txn-amount {
   font-family: "Noto Serif Bengali";
-  font-size: 16px;
+  font-size: 19px;
   font-weight: 700;
 }
 .txn-amount.debit {
@@ -1042,7 +1046,7 @@ body {
 
 .amount-label {
   font-family: "Noto Serif Bengali";
-  font-size: 14px;
+  font-size: 17px;
   color: var(--text-mid);
   margin-bottom: 10px;
 }
@@ -1088,7 +1092,7 @@ body {
   color: var(--text-dark);
 }
 .preset-en {
-  font-size: 12px;
+  font-size: 15px;
   color: var(--text-mid);
 }
 .review-card {
@@ -1099,7 +1103,7 @@ body {
 }
 .review-title {
   font-family: "Noto Serif Bengali";
-  font-size: 15px;
+  font-size: 18px;
   font-weight: 700;
   margin-bottom: 12px;
 }
@@ -1114,12 +1118,12 @@ body {
   font-weight: 700;
 }
 .review-key {
-  font-size: 13px;
+  font-size: 16px;
   color: var(--text-mid);
   font-family: "Noto Serif Bengali";
 }
 .review-val {
-  font-size: 13px;
+  font-size: 16px;
   font-family: "Noto Serif Bengali";
   font-weight: 600;
   color: var(--text-dark);
@@ -1185,11 +1189,11 @@ body {
 }
 .bill-name {
   font-family: "Noto Serif Bengali";
-  font-size: 15px;
+  font-size: 18px;
   font-weight: 600;
 }
 .bill-en {
-  font-size: 12px;
+  font-size: 15px;
   color: var(--text-mid);
 }
 
@@ -1229,11 +1233,11 @@ body {
 }
 .tutorial-title {
   font-family: "Noto Serif Bengali";
-  font-size: 15px;
+  font-size: 18px;
   font-weight: 700;
 }
 .tutorial-en {
-  font-size: 12px;
+  font-size: 15px;
   color: var(--text-mid);
 }
 .helpline-btn {
@@ -1256,7 +1260,7 @@ body {
   color: white;
 }
 .helpline-label {
-  font-size: 12px;
+  font-size: 15px;
   opacity: 0.7;
   font-family: "Noto Serif Bengali";
 }
@@ -1274,11 +1278,11 @@ body {
 }
 .faq-q {
   font-family: "Noto Serif Bengali";
-  font-size: 14px;
+  font-size: 17px;
   font-weight: 700;
 }
 .faq-a {
-  font-size: 13px;
+  font-size: 16px;
   color: var(--text-mid);
   margin-top: 4px;
   font-family: "Noto Serif Bengali";
@@ -1299,7 +1303,7 @@ body {
   padding: 16px 0 4px;
 }
 .profile-sub {
-  font-size: 13px;
+  font-size: 16px;
   color: var(--text-mid);
   padding-bottom: 12px;
   font-family: "Noto Serif Bengali";
@@ -1332,11 +1336,11 @@ body {
 }
 .toggle-name {
   font-family: "Noto Serif Bengali";
-  font-size: 15px;
+  font-size: 18px;
   font-weight: 600;
 }
 .toggle-en {
-  font-size: 12px;
+  font-size: 15px;
   color: var(--text-mid);
 }
 .toggle-switch {
@@ -1369,7 +1373,7 @@ body {
 }
 .settings-title {
   font-family: "Noto Serif Bengali";
-  font-size: 14px;
+  font-size: 17px;
   color: var(--text-mid);
   padding: 8px 0;
 }
@@ -1394,11 +1398,11 @@ body {
 }
 .settings-name {
   font-family: "Noto Serif Bengali";
-  font-size: 15px;
+  font-size: 18px;
   font-weight: 600;
 }
 .settings-en {
-  font-size: 12px;
+  font-size: 15px;
   color: var(--text-mid);
 }
 .logout-btn {
@@ -1442,7 +1446,8 @@ body {
   padding: 24px 20px 36px;
   width: 100%;
   animation: slideUp 0.3s ease;
-  max-height: 80vh;
+  min-height: 95vh;
+  max-height: 100vh;
   overflow-y: auto;
 }
 @keyframes slideUp {
@@ -1455,12 +1460,12 @@ body {
 }
 .modal-title {
   font-family: "Noto Serif Bengali";
-  font-size: 20px;
+  font-size: 22px;
   font-weight: 700;
   margin-bottom: 12px;
 }
 .modal-body {
-  font-size: 14px;
+  font-size: 17px;
   color: var(--text-mid);
   line-height: 1.7;
   font-family: "Noto Serif Bengali";
@@ -1525,11 +1530,11 @@ body {
 }
 .cp-name {
   font-family: "Noto Serif Bengali";
-  font-size: 15px;
+  font-size: 18px;
   font-weight: 600;
 }
 .cp-phone {
-  font-size: 12px;
+  font-size: 15px;
   color: var(--text-mid);
   font-family: "Tiro Bangla", serif;
 }
@@ -1550,7 +1555,7 @@ body {
 /* ============ FORM INPUTS (NUMPAD STYLE) ============ */
 .form-label {
   font-family: "Noto Serif Bengali";
-  font-size: 14px;
+  font-size: 17px;
   color: var(--text-mid);
   margin-bottom: 6px;
   display: block;
@@ -1660,7 +1665,7 @@ body {
   color: var(--green-dark);
 }
 .success-body {
-  font-size: 14px;
+  font-size: 17px;
   color: var(--text-mid);
   font-family: "Noto Serif Bengali";
   line-height: 1.6;
@@ -1677,14 +1682,14 @@ body {
   margin-bottom: 10px;
 }
 .tutorial-step-num {
-  font-size: 11px;
+  font-size: 14px;
   color: var(--green-dark);
   font-weight: 700;
   margin-bottom: 4px;
 }
 .tutorial-step-text {
   font-family: "Noto Serif Bengali";
-  font-size: 14px;
+  font-size: 17px;
   color: var(--text-dark);
   line-height: 1.5;
 }
@@ -1700,7 +1705,7 @@ body {
   padding: 14px 18px;
   border-radius: 14px;
   font-family: "Noto Serif Bengali";
-  font-size: 14px;
+  font-size: 17px;
   z-index: 500;
   text-align: center;
   animation: toastIn 0.3s ease;
@@ -1726,7 +1731,7 @@ body {
   padding: 14px 18px;
   border-radius: 14px;
   font-family: "Noto Serif Bengali";
-  font-size: 14px;
+  font-size: 17px;
   z-index: 500;
   text-align: center;
   animation: toastIn 0.3s ease;
@@ -1742,7 +1747,7 @@ body {
   padding: 14px 18px;
   border-radius: 14px;
   font-family: "Noto Serif Bengali";
-  font-size: 15px;
+  font-size: 17px;
   z-index: 500;
   text-align: center;
   animation: toastIn 0.3s ease;
@@ -1850,7 +1855,7 @@ body {
 }
 .phone-validation-msg {
   font-family: "Noto Serif Bengali";
-  font-size: 13px;
+  font-size: 16px;
   padding: 4px 4px 0;
   min-height: 18px;
 }
