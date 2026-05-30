@@ -59,6 +59,45 @@ let contacts = [
 
 let transactions = [];
 
+// ============ VOICE AUDIO ============
+let currentAudio = null;
+let voiceMuted = false;
+
+function playVoice(filename) {
+  if (voiceMuted) return;
+  try {
+    if (currentAudio) {
+      currentAudio.pause();
+      currentAudio.currentTime = 0;
+    }
+    currentAudio = new Audio("voice/" + filename);
+    currentAudio.play().catch(() => {});
+  } catch (e) {}
+}
+
+function toggleVoiceMute() {
+  voiceMuted = !voiceMuted;
+  const icon = document.getElementById("mute-icon");
+  const btn = document.getElementById("voice-mute-btn");
+  if (voiceMuted) {
+    icon.innerHTML = `
+      <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/>
+      <line x1="23" y1="9" x2="17" y2="15"/>
+      <line x1="17" y1="9" x2="23" y2="15"/>
+    `;
+    btn.style.background = "var(--red-circle)";
+    btn.style.border = "2px solid #c0392b";
+  } else {
+    icon.innerHTML = `
+      <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/>
+      <path d="M19.07 4.93a10 10 0 010 14.14"/>
+      <path d="M15.54 8.46a5 5 0 010 7.07"/>
+    `;
+    btn.style.background = "var(--green-dark)";
+    btn.style.border = "none";
+  }
+}
+
 // ============ BANGLA NUMERALS ============
 const bnNum = (n) => String(n).replace(/[0-9]/g, (d) => "০১২৩৪৫৬৭৮৯"[d]);
 const formatBDT = (n) => "৳ " + bnNum(n.toLocaleString("en"));
@@ -165,6 +204,7 @@ function checkPin() {
       updateHomeActions();
       renderTransactions();
       renderToggleList();
+      playVoice("home.mp3");
     } else if (pinMode === "send") {
       executeSend();
     }
@@ -259,14 +299,10 @@ function openOtpNumpad() {
 }
 
 function otpKey(d) {
-  if (otpValue.length >= 6) return;
-  otpValue += d;
-  renderOtpBoxes();
-  if (otpValue.length === 6) setTimeout(checkOtp, 200);
+  // Legacy - no-op, inline boxes handle OTP input now
 }
 function otpDelete() {
-  otpValue = otpValue.slice(0, -1);
-  renderOtpBoxes();
+  // Legacy - no-op, inline boxes handle OTP input now
 }
 
 function checkOtp() {
@@ -281,6 +317,7 @@ function checkOtp() {
       updateHomeActions();
       renderTransactions();
       renderToggleList();
+      playVoice("home.mp3");
     } else {
       executeSend();
     }
@@ -383,24 +420,35 @@ function navigate(id) {
   }
   if (id === "bills") {
     showScreen("bills");
+    playVoice("bill.mp3");
     return;
   }
   if (id === "receive") {
     showScreen("receive");
     renderTransactionsHishab();
+    playVoice("hishab.mp3");
     return;
   }
   if (id === "receive_qr") {
     showScreen("qr");
+    playVoice("receive.mp3");
     return;
   }
   showScreen(id);
   if (id === "home") {
     updateBalanceDisplay();
     renderTransactions();
+    playVoice("home.mp3");
+  }
+  if (id === "receive") {
+    // already handled above, but ensure voice
   }
   if (id === "profile") {
     renderToggleList();
+    playVoice("profile.mp3");
+  }
+  if (id === "help") {
+    playVoice("help.mp3");
   }
 }
 
@@ -457,13 +505,7 @@ function updateSendScreenContact() {
 
 // ============ HISHAB TABS ============
 function switchHishabTab(tab) {
-  document.getElementById("tab-qr").classList.toggle("active", tab === "qr");
-  document.getElementById("tab-txn").classList.toggle("active", tab === "txn");
-  document.getElementById("hishab-qr-panel").style.display =
-    tab === "qr" ? "" : "none";
-  document.getElementById("hishab-txn-panel").style.display =
-    tab === "txn" ? "" : "none";
-  if (tab === "txn") renderTransactionsHishab();
+  // Legacy function - tabs removed, no-op
 }
 
 // ============ HOME ============
@@ -491,7 +533,7 @@ const ACTION_DEFS = {
     color: "var(--teal-circle)",
     iconStroke: "var(--green-dark)",
     icon: '<line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/>',
-    action: "navigate('send')",
+    action: "playVoice('send.mp3'); navigate('send')",
   },
   receive: {
     label: "নিন",
@@ -512,7 +554,7 @@ const ACTION_DEFS = {
     color: "var(--purple-circle)",
     iconStroke: "#5a4a8a",
     icon: '<path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87"/><path d="M16 3.13a4 4 0 010 7.75"/>',
-    action: "openContactsModal()",
+    action: "playVoice('contact.mp3'); openContactsModal()",
   },
 };
 
@@ -916,6 +958,7 @@ function executeSend() {
   lastTxnId = 0;
 
   document.getElementById("success-title").textContent = "টাকা পাঠানো হয়েছে!";
+  playVoice("sent.mp3");
   document.getElementById("success-body").innerHTML = `
     <strong>${currentSendContact.name}</strong>-কে ${formatBDT(currentSendAmount)} পাঠানো হয়েছে।<br><br>
     ৩০ মিনিটের মধ্যে ফেরত নিতে পারবেন।
@@ -928,6 +971,7 @@ function executeSend() {
 function closeSuccess() {
   document.getElementById("success-screen").classList.remove("active");
   navigate("home");
+  // home voice already plays inside navigate("home")
 }
 
 function showRefundConfirm() {
@@ -946,6 +990,7 @@ function closeRefundModal(e) {
 
 function confirmRefund() {
   if (lastTxnId === null) return;
+  playVoice("back.mp3");
   const t = transactions[lastTxnId];
   if (Date.now() > t.canRefundUntil) {
     showErrorToast("৩০ মিনিট পেরিয়ে গেছে, ফেরত সম্ভব নয়।");
@@ -1166,3 +1211,15 @@ renderToggleList();
 ["home", "receive", "bills", "help", "profile"].forEach((id) => {
   renderBottomNav("bottom-nav-" + id, id);
 });
+
+function updateClock() {
+  const now = new Date().toLocaleTimeString("en-BD", {
+    timeZone: "Asia/Dhaka",
+    hour: "2-digit",
+    minute: "2-digit",
+    hour12: false,
+  });
+  document.getElementById("status-time").textContent = now;
+}
+updateClock();
+setInterval(updateClock, 1000);
