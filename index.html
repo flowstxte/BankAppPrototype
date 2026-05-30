@@ -510,6 +510,30 @@
     </div>
     <button class="btn-outline" onclick="resendOtp()">কোড পাননি? আবার পাঠান</button>
   </div>
+  <!-- SEND CONFIRM SCREEN -->
+  <div id="send-confirm-screen" class="overlay-screen">
+    <div class="confirm-sheet">
+      <div class="confirm-title">নিশ্চিত করুন</div>
+      <div class="confirm-row">
+        <span class="confirm-key">প্রাপক</span>
+        <span class="confirm-val" id="confirm-recipient">—</span>
+      </div>
+      <div class="confirm-row">
+        <span class="confirm-key">পরিমাণ</span>
+        <span class="confirm-val" id="confirm-amount">—</span>
+      </div>
+      <div class="confirm-row">
+        <span class="confirm-key">চার্জ</span>
+        <span class="confirm-val">৳ ০</span>
+      </div>
+      <div class="confirm-row confirm-total">
+        <span class="confirm-key">মোট</span>
+        <span class="confirm-val" id="confirm-total">—</span>
+      </div>
+      <button class="btn-primary" style="margin-top:32px;" onclick="confirmAndProceed()">নিশ্চিত করুন</button>
+      <button class="btn-outline" style="margin-top:12px;" onclick="closeSendConfirm()">বাতিল করুন</button>
+    </div>
+  </div>
 
   <!-- SUCCESS SCREEN -->
   <div class="success-screen" id="success-screen">

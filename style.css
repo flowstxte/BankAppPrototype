@@ -1446,8 +1446,8 @@ body {
   padding: 24px 20px 36px;
   width: 100%;
   animation: slideUp 0.3s ease;
-  min-height: 95vh;
-  max-height: 100vh;
+  min-height: 80vh;
+  max-height: 90vh;
   overflow-y: auto;
 }
 @keyframes slideUp {
@@ -1619,6 +1619,60 @@ body {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   gap: 10px;
+}
+
+/* ============ SEND CONFIRM SCREEN ============ */
+.overlay-screen {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.55);
+  z-index: 300;
+  display: none;
+  align-items: center;
+  justify-content: center;
+}
+.overlay-screen.active {
+  display: flex;
+}
+.confirm-sheet {
+  background: white;
+  border-radius: 24px;
+  padding: 32px 24px 28px;
+  width: 88%;
+  max-width: 360px;
+  display: flex;
+  flex-direction: column;
+}
+.confirm-title {
+  font-family: "Noto Serif Bengali";
+  font-size: 22px;
+  font-weight: 700;
+  color: var(--green-dark);
+  text-align: center;
+  margin-bottom: 24px;
+}
+.confirm-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 14px 0;
+  border-bottom: 1px solid var(--border);
+  font-family: "Noto Serif Bengali";
+  font-size: 17px;
+}
+.confirm-row.confirm-total {
+  border-bottom: none;
+  font-size: 19px;
+  font-weight: 700;
+  color: var(--green-dark);
+  margin-top: 4px;
+}
+.confirm-key {
+  color: var(--text-mid);
+}
+.confirm-val {
+  color: var(--text-dark);
+  font-weight: 600;
 }
 
 /* ============ SUCCESS SCREEN ============ */

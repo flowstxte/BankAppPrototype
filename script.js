@@ -930,8 +930,42 @@ function initiateSend() {
     showErrorToast("আপনার ব্যালেন্স যথেষ্ট নয়!");
     return;
   }
+  // Populate confirm screen
+  const name = currentSendContact ? currentSendContact.name : "—";
+  const amt = formatBDT(currentSendAmount);
+  document.getElementById("confirm-recipient").textContent = name;
+  document.getElementById("confirm-amount").textContent = amt;
+  document.getElementById("confirm-total").textContent = amt;
+  // Show confirm screen
+  document.getElementById("send-confirm-screen").classList.add("active");
+  // Voice prompt using Web Speech API
+  speakConfirmPrompt(name, currentSendAmount);
+}
+
+async function speakConfirmPrompt(name, amount) {
+  if (voiceMuted) return;
+  try {
+    const text = `আপনি ${name} কে ${amount} টাকা পাঠাতে চাইলে নিশ্চিত করুন`;
+    const url = `https://bank-app-prototype.vercel.app/api/tts?text=${encodeURIComponent(text)}`;
+    if (currentAudio) {
+      currentAudio.pause();
+      currentAudio.currentTime = 0;
+    }
+    currentAudio = new Audio(url);
+    currentAudio.play().catch(() => {});
+  } catch (e) {}
+}
+
+function confirmAndProceed() {
+  window.speechSynthesis.cancel();
+  closeSendConfirm();
   pinAttempts = 0;
   openPin("send");
+}
+
+function closeSendConfirm() {
+  document.getElementById("send-confirm-screen").classList.remove("active");
+  window.speechSynthesis.cancel();
 }
 
 function executeSend() {
