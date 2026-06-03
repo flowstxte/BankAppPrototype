@@ -29,6 +29,8 @@ let manualPhoneValue = "";
 let billAccountValue = "";
 let billAmountValue = "500";
 
+let currentTutorialKey = 'send';
+
 const profileToggles = {
   send: true,
   receive: true,
@@ -65,6 +67,7 @@ let voiceMuted = false;
 
 function playVoice(filename) {
   if (voiceMuted) return;
+  if (wtIntercepting) return;
   try {
     if (currentAudio) {
       currentAudio.pause();
@@ -206,6 +209,7 @@ function checkPin() {
       renderToggleList();
       playVoice("home.mp3");
     } else if (pinMode === "send") {
+      if (wtIntercepting && wtStep === 6) wtAdvance();
       executeSend();
     }
   } else {
@@ -438,7 +442,8 @@ function navigate(id) {
   if (id === "home") {
     updateBalanceDisplay();
     renderTransactions();
-    playVoice("home.mp3");
+    playVoice('home.mp3');
+    if (wtIntercepting && wtStep === 0) wtAdvance();
   }
   if (id === "receive") {
     // already handled above, but ensure voice
@@ -479,6 +484,7 @@ function showContactPickerThenSend() {
   const btn = document.getElementById("phone-confirm-btn");
   if (btn) btn.style.display = "none";
   document.getElementById("contact-picker-modal").classList.add("active");
+  if (wtIntercepting && wtStep === 1) wtAdvance();
 }
 
 let pendingSendNavigation = false;
@@ -488,6 +494,7 @@ function selectContactAndGoSend(i) {
   document.getElementById("contact-picker-modal").classList.remove("active");
   showScreen("send");
   updateSendScreenContact();
+  if (wtIntercepting && wtStep === 2) wtAdvance();
 }
 
 function updateSendScreenContact() {
@@ -634,6 +641,7 @@ function selectPreset(amount, el) {
   if (inp) inp.value = amount;
   document.getElementById("review-amount").textContent = formatBDT(amount);
   document.getElementById("review-total").textContent = formatBDT(amount);
+  if (wtIntercepting && wtStep === 3) wtAdvance();
 }
 
 // Inline amount input handlers
@@ -926,6 +934,7 @@ function closeContactsModal(e) {
 }
 
 function initiateSend() {
+  if (wtIntercepting && wtStep === 4) wtAdvance();
   if (currentSendAmount > balance) {
     showErrorToast("আপনার ব্যালেন্স যথেষ্ট নয়!");
     return;
@@ -957,6 +966,7 @@ async function speakConfirmPrompt(name, amount) {
 }
 
 function confirmAndProceed() {
+  if (wtIntercepting && wtStep === 5) wtAdvance();
   window.speechSynthesis.cancel();
   closeSendConfirm();
   pinAttempts = 0;
@@ -1003,6 +1013,7 @@ function executeSend() {
 }
 
 function closeSuccess() {
+  if (wtIntercepting && wtStep === 7) wtAdvance();
   document.getElementById("success-screen").classList.remove("active");
   navigate("home");
   // home voice already plays inside navigate("home")
@@ -1195,6 +1206,7 @@ const TUTORIALS = {
 };
 
 function showTutorial(key) {
+  currentTutorialKey = key;
   const t = TUTORIALS[key];
   document.getElementById("tutorial-content").innerHTML = `
     <div class="modal-title">${t.title}</div>
@@ -1255,5 +1267,123 @@ function updateClock() {
   });
   document.getElementById("status-time").textContent = now;
 }
+
+// ============ WALKTHROUGH SYSTEM ============
+let wtStep = 0;
+let wtAudioLoop = null;
+let wtIntercepting = false;
+
+const SEND_WALKTHROUGH = [
+  { target: 'nav-home',           label: 'হোম বাটনে ক্লিক করুন',           audio: 'হোম বাটনে ক্লিক করুন',           event: 'nav-home' },
+  { target: 'action-send',        label: 'পাঠান বাটনে ক্লিক করুন',          audio: 'পাঠান বাটনে ক্লিক করুন',          event: 'action-send' },
+  { target: 'contact-rafiq',      label: 'রফিক উদ্দিন বেছে নিন',            audio: 'রফিক উদ্দিন বেছে নিন',            event: 'contact-rafiq' },
+  { target: 'preset-100',         label: 'একশত টাকার বাটনে চাপুন',          audio: 'একশত টাকার বাটনে চাপুন',          event: 'preset-100' },
+  { target: 'send-btn',           label: 'পাঠিয়ে দিন বাটনে চাপুন',          audio: 'পাঠিয়ে দিন বাটনে চাপুন',          event: 'send-btn' },
+  { target: 'confirm-btn',        label: 'নিশ্চিত করুন বাটনে চাপুন',        audio: 'নিশ্চিত করুন বাটনে চাপুন',        event: 'confirm-btn' },
+  { target: 'pin-0000',           label: 'পিন দিন: ০০০০',                   audio: 'শূন্য শূন্য শূন্য শূন্য পিন দিন',  event: 'pin-0000' },
+  { target: 'home-after-success', label: 'হোমে ফিরুন বাটনে চাপুন',          audio: 'হোমে ফিরুন বাটনে চাপুন',          event: 'home-after-success' },
+];
+
+function startPractice(key) {
+  closeTutorialModal();
+  if (key !== 'send') {
+    showDummyToast();
+    return;
+  }
+  wtStep = 0;
+  wtIntercepting = true;
+  if (currentAudio) { currentAudio.pause(); currentAudio.currentTime = 0; }
+  window.speechSynthesis && window.speechSynthesis.cancel();
+  document.getElementById('wt-complete-screen').style.display = 'none';
+  // Make sure we start on home
+  navigate('home');
+  setTimeout(() => showWtStep(), 400);
+}
+
+function showWtStep() {
+  if (wtStep >= SEND_WALKTHROUGH.length) return;
+  const step = SEND_WALKTHROUGH[wtStep];
+  // Kill all original audio during walkthrough
+  if (currentAudio) { currentAudio.pause(); currentAudio.currentTime = 0; }
+  clearInterval(wtAudioLoop);
+  const overlay = document.getElementById('walkthrough-overlay');
+  overlay.style.display = 'block';
+
+  // Find target element position
+  const el = getWtTarget(step.target);
+  const label = document.getElementById('wt-label');
+  const arrowWrap = document.getElementById('wt-arrow-wrap');
+
+  label.textContent = step.label;
+
+  if (el) {
+    const rect = el.getBoundingClientRect();
+    const arrowTop = rect.top - 56;
+    arrowWrap.style.top = Math.max(arrowTop, 10) + 'px';
+    arrowWrap.style.left = (rect.left + rect.width / 2 - 20) + 'px';
+  }
+
+  // Audio loop
+  clearInterval(wtAudioLoop);
+  playWtAudio(step.audio);
+  wtAudioLoop = setInterval(() => playWtAudio(step.audio), 4000);
+}
+
+function playWtAudio(text) {
+  // Walkthrough audio always plays, ignore mute, stop any other audio first
+  try {
+    if (currentAudio) { currentAudio.pause(); currentAudio.currentTime = 0; }
+    window.speechSynthesis && window.speechSynthesis.cancel();
+    const url = `https://bank-app-prototype.vercel.app/api/tts?text=${encodeURIComponent(text)}`;
+    const a = new Audio(url);
+    a.play().catch(() => {});
+    currentAudio = a;
+  } catch(e) {}
+}
+
+function getWtTarget(id) {
+  switch(id) {
+    case 'nav-home':    return document.querySelector('#bottom-nav-home .nav-item') || document.querySelector('.nav-item');
+    case 'action-send': return document.querySelector('.action-card');
+    case 'contact-rafiq': return document.querySelector('#contact-picker-list .contact-pick-item');
+    case 'preset-100':  return document.querySelector('.preset-btn');
+    case 'send-btn':    return document.querySelector('#send-screen .btn-primary');
+    case 'confirm-btn': return document.querySelector('#send-confirm-screen .btn-primary');
+    case 'pin-0000':
+      return Array.from(document.querySelectorAll('.pin-keypad .key-btn'))
+        .find(b => b.textContent.trim() === '০');
+    case 'home-after-success': return document.querySelector('#success-screen .btn-primary');
+    default: return null;
+  }
+}
+
+function wtAdvance() {
+  if (!wtIntercepting) return;
+  wtStep++;
+  clearInterval(wtAudioLoop);
+  if (wtStep >= SEND_WALKTHROUGH.length) {
+    endWalkthrough();
+    return;
+  }
+  setTimeout(() => showWtStep(), 600);
+}
+
+function endWalkthrough() {
+  clearInterval(wtAudioLoop);
+  wtIntercepting = false;
+  document.getElementById('walkthrough-overlay').style.display = 'none';
+  // Add 20 tk reward
+  balance += 20;
+  updateBalanceDisplay();
+  // Show completion screen
+  const cs = document.getElementById('wt-complete-screen');
+  cs.style.display = 'flex';
+}
+
+function closeWalkthrough() {
+  document.getElementById('wt-complete-screen').style.display = 'none';
+  navigate('home');
+}
+
 updateClock();
 setInterval(updateClock, 1000);

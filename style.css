@@ -1913,3 +1913,14 @@ body {
   padding: 4px 4px 0;
   min-height: 18px;
 }
+
+/* ============ WALKTHROUGH ============ */
+#walkthrough-overlay {
+  pointer-events: none;
+}
+#wt-backdrop {
+  pointer-events: none;
+}
+#wt-label {
+  box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+}
