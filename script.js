@@ -1321,6 +1321,17 @@ function showWtStep() {
     const arrowTop = rect.top - 56;
     arrowWrap.style.top = Math.max(arrowTop, 10) + 'px';
     arrowWrap.style.left = (rect.left + rect.width / 2 - 20) + 'px';
+
+    // For PIN step, place label between pin dots and keypad
+    const label = document.getElementById('wt-label');
+    if (step.target === 'pin-0000') {
+      const dotsRect = document.getElementById('pin-dots').getBoundingClientRect();
+      label.style.top = (dotsRect.bottom + 10) + 'px';
+      label.style.bottom = 'auto';
+    } else {
+      label.style.top = 'auto';
+      label.style.bottom = '120px';
+    }
   }
 
   // Audio loop
