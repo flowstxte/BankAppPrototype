@@ -1548,6 +1548,9 @@ function toggleAppMode() {
 
   // Re-render home actions for correct grid
   updateHomeActions();
+  
+  // --- ADDED THIS LINE TO JUMP TO HOME TAB ---
+  navigate('home');
 }
 
 function updateHomeActions() {
