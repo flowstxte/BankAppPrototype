@@ -1924,3 +1924,80 @@ body {
 #wt-label {
   box-shadow: 0 4px 20px rgba(0,0,0,0.3);
 }
+
+/* ============ CONFIDENCE SCORE BAR ============ */
+.confidence-wrap {
+  margin: 0 16px 16px;
+  background: white;
+  border-radius: 16px;
+  padding: 16px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+}
+.confidence-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 10px;
+}
+.confidence-title {
+  font-family: "Noto Serif Bengali";
+  font-size: 20px;
+  font-weight: 600;
+  color: var(--text-dark);
+}
+.confidence-score-text {
+  font-family: "Noto Serif Bengali";
+  font-size: 20px;
+  font-weight: 700;
+  color: var(--green-dark);
+}
+.confidence-bar-track {
+  width: 100%;
+  height: 14px;
+  background: var(--border);
+  border-radius: 99px;
+  overflow: hidden;
+  margin-bottom: 8px;
+}
+.confidence-bar-fill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--green-mid), var(--green-dark));
+  border-radius: 99px;
+  transition: width 0.6s ease;
+  min-width: 0%;
+}
+.confidence-label {
+  font-family: "Noto Serif Bengali";
+  font-size: 13px;
+  color: var(--text-mid);
+  text-align: right;
+}
+
+/* ============ REGULAR MODE ============ */
+body.regular-mode .action-label { font-size: 13px; }
+body.regular-mode .action-icon  { width: 48px; height: 48px; }
+body.regular-mode .action-card  { padding: 10px 6px; }
+body.regular-mode .quick-actions { grid-template-columns: repeat(4, 1fr); gap: 8px; }
+
+body.regular-mode .balance-label { font-size: 13px; }
+body.regular-mode .balance-amount { font-size: 28px; }
+body.regular-mode .home-greeting-name { font-size: 18px; }
+body.regular-mode .home-greeting-en { font-size: 12px; }
+body.regular-mode .section-title { font-size: 15px; }
+body.regular-mode .txn-name { font-size: 14px; }
+body.regular-mode .txn-time { font-size: 12px; }
+body.regular-mode .txn-amount { font-size: 14px; }
+body.regular-mode .nav-item span { font-size: 11px; }
+body.regular-mode .btn-primary { font-size: 15px; padding: 14px; }
+
+/* Hide basic-mode-only elements in regular mode */
+body.regular-mode #home-confidence { display: none !important; }
+body.regular-mode #help-confidence { display: none !important; }
+body.regular-mode .learn-btn { display: none !important; }
+body.regular-mode #help-tutorial-section { display: none !important; }
+
+/* Grey out customize section in regular mode */
+body.regular-mode #customize-section {
+  opacity: 0.4;
+  pointer-events: none;
+}

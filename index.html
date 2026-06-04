@@ -23,6 +23,19 @@
   50% { opacity: 1; }
   100% { transform: translateY(8px); opacity: 0; }
 }
+
+#practice-mode-bar {
+  display: none;
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  z-index: 8000;
+  background: var(--green-dark);
+  color: white;
+  font-family: 'Noto Serif Bengali';
+  font-size: 20px;
+  text-align: center;
+  padding: 6px;
+}
 </style>
 </head>
 <body>
@@ -46,6 +59,7 @@
 
 <!-- App -->
 <div id="app">
+  <div id="practice-mode-bar">🟢 প্র্যাকটিস মোড: টাকা পাঠান</div>
   <!-- Status Bar -->
   <div class="status-bar">
     <span id="status-time">0:00</span>
@@ -164,6 +178,17 @@
       <div class="balance-card" onclick="toggleBalanceVisibility()">
         <div class="balance-label">আপনার টাকা</div>
         <div class="balance-amount" id="balance-display">৳ ৮৫,৪২০</div>
+      </div>
+
+      <!-- CONFIDENCE SCORE BAR -->
+      <div class="confidence-wrap" id="home-confidence">
+        <div class="confidence-header">
+          <span class="confidence-title">ডিজিটাল ব্যাংকিং আত্মবিশ্বাস</span>
+          <span class="confidence-score-text">0%</span>
+        </div>
+        <div class="confidence-bar-track">
+          <div class="confidence-bar-fill" style="width:0%"></div>
+        </div>
       </div>
 
       <div class="learn-btn" onclick="navigate('help')">
@@ -367,32 +392,62 @@
     <div class="scroll-area">
       <div style="padding:16px 0;">
         <div class="screen-title" style="padding:0 16px 16px;">শিখুন</div>
-        <div class="tutorial-card" onclick="showTutorial('send')">
-          <div class="tutorial-play" style="background:var(--teal-circle)">
-            <svg viewBox="0 0 24 24" style="stroke:var(--green-dark)"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+
+        <!-- CONFIDENCE SCORE BAR -->
+        <div class="confidence-wrap" id="help-confidence">
+          <div class="confidence-header">
+            <span class="confidence-title">ডিজিটাল ব্যাংকিং আত্মবিশ্বাস</span>
+            <span class="confidence-score-text">0%</span>
           </div>
-          <div><div class="tutorial-title">টাকা পাঠান</div><div class="tutorial-en">Practice: Send Money</div></div>
+          <div class="confidence-bar-track">
+            <div class="confidence-bar-fill" style="width:0%"></div>
+          </div>
         </div>
-        <div class="tutorial-card" onclick="showTutorial('receive')">
-          <div class="tutorial-play" style="background:var(--yellow-circle)">
-            <svg viewBox="0 0 24 24" style="stroke:#8a6d00"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+      
+        <!-- Tips box -->
+        <!-- <div style="margin: -8px 16px 16px;">
+          <button onclick="this.nextElementSibling.style.display=this.nextElementSibling.style.display==='block'?'none':'block'; this.querySelector('.faq-arrow').style.transform=this.nextElementSibling.style.display==='block'?'rotate(180deg)':'rotate(0deg)'" style="width:100%;background:var(--green-pale);border:none;border-radius:12px;padding:14px 16px;display:flex;justify-content:space-between;align-items:center;cursor:pointer;border-left:4px solid var(--green-dark);">
+            <span style="font-family:'Noto Serif Bengali';font-size:20px;font-weight:700;color:var(--green-dark);">স্কোর কীভাবে বাড়াবেন?</span>
+            <span class="faq-arrow" style="font-size:20px;color:var(--green-dark);transition:transform 0.3s;">▼</span>
+          </button>
+          <div style="display:none;background:var(--green-pale);border-radius:0 0 12px 12px;padding:12px 16px 14px;border-left:4px solid var(--green-dark);border-top:1px solid rgba(0,0,0,0.06);">
+            <div style="font-family:'Noto Serif Bengali';font-size:18px;color:var(--text-dark);line-height:1.9;">
+              ব্যালেন্স দেখুন — প্রতিবার ২ পয়েন্ট (সর্বোচ্চ ৫ বার)<br>
+              টাকা পাঠান — প্রতিবার ৫ পয়েন্ট (সর্বোচ্চ ৬ বার)<br>
+              বিল পরিশোধ করুন — প্রতিটি বিলে ৫ পয়েন্ট<br>
+              <span style="color:var(--text-mid);font-size:16px;">বিদ্যুৎ, গ্যাস, পানি, ইন্টারনেট, মোবাইল, টিভি</span>
+            </div>
           </div>
-          <div><div class="tutorial-title">টাকা নিন</div><div class="tutorial-en">Practice: Receive Money</div></div>
-        </div>
-        <div class="tutorial-card" onclick="showTutorial('bill')">
-          <div class="tutorial-play" style="background:var(--red-circle)">
-            <svg viewBox="0 0 24 24" style="stroke:#8a3020"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+        </div> -->
+
+        <div id="help-tutorial-section">
+          <div class="tutorial-card" onclick="showTutorial('send')">
+            <div class="tutorial-play" style="background:var(--teal-circle)">
+              <svg viewBox="0 0 24 24" style="stroke:var(--green-dark)"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+            </div>
+            <div><div class="tutorial-title">টাকা পাঠান</div><div class="tutorial-en">Practice: Send Money</div></div>
           </div>
-          <div><div class="tutorial-title">বিল পরিশোধ</div><div class="tutorial-en">Practice: Pay Bills</div></div>
-        </div>
-        <div class="tutorial-card" onclick="showTutorial('contact')">
-          <div class="tutorial-play" style="background:var(--purple-circle)">
-            <svg viewBox="0 0 24 24" style="stroke:#5a4a8a"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+          <div class="tutorial-card" onclick="showTutorial('receive')">
+            <div class="tutorial-play" style="background:var(--yellow-circle)">
+              <svg viewBox="0 0 24 24" style="stroke:#8a6d00"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+            </div>
+            <div><div class="tutorial-title">টাকা নিন</div><div class="tutorial-en">Practice: Receive Money</div></div>
           </div>
-          <div><div class="tutorial-title">যোগাযোগ যোগ করুন</div><div class="tutorial-en">Practice: Add Contacts</div></div>
+          <div class="tutorial-card" onclick="showTutorial('bill')">
+            <div class="tutorial-play" style="background:var(--red-circle)">
+              <svg viewBox="0 0 24 24" style="stroke:#8a3020"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+            </div>
+            <div><div class="tutorial-title">বিল পরিশোধ</div><div class="tutorial-en">Practice: Pay Bills</div></div>
+          </div>
+          <div class="tutorial-card" onclick="showTutorial('contact')">
+            <div class="tutorial-play" style="background:var(--purple-circle)">
+              <svg viewBox="0 0 24 24" style="stroke:#5a4a8a"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+            </div>
+            <div><div class="tutorial-title">যোগাযোগ যোগ করুন</div><div class="tutorial-en">Practice: Add Contacts</div></div>
+          </div>
         </div>
 
-        <div style="padding:8px 16px;font-family:'Noto Serif Bengali';font-size:13px;color:var(--text-mid);">সরাসরি সাহায্য পান</div>
+        <div style="padding:8px 16px;font-family:'Noto Serif Bengali';font-size:16px;color:var(--text-mid);">সরাসরি সাহায্য পান</div>
         <div style="padding:0 16px;">
           <div class="helpline-btn">
             <svg viewBox="0 0 24 24"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07A19.5 19.5 0 013.07 9.27 19.79 19.79 0 01.12 0.64a2 2 0 012-2.18h3a2 2 0 012 1.72c.127.96.361 1.903.7 2.81a2 2 0 01-.45 2.11L6.91 8.35a16 16 0 006.72 6.72l1.07-1.06a2 2 0 012.11-.45c.907.339 1.85.573 2.81.7a2 2 0 011.72 2.02z"/></svg>
@@ -403,7 +458,7 @@
           </div>
         </div>
 
-        <div style="padding:12px 16px 4px;font-family:'Noto Serif Bengali';font-size:13px;color:var(--text-mid);">সাধারণ প্রশ্নোত্তর</div>
+        <div style="padding:12px 16px 4px;font-family:'Noto Serif Bengali';font-size:16px;color:var(--text-mid);">সাধারণ প্রশ্নোত্তর</div>
         <div style="padding:0 16px;">
           <div class="faq-item" onclick="toggleFaq(this)">
             <div class="faq-q">সর্বোচ্চ কত টাকা পাঠাতে পারি?</div>
@@ -431,11 +486,15 @@
   <div id="profile-screen" class="screen">
     <div class="scroll-area">
       <div style="padding:16px;">
-        <div class="screen-title" style="padding-bottom:4px;">প্রোফাইল</div>
-        <div class="profile-section-title">আপনার হোমপেজ কাস্টমাইজ করুন</div>
-        <div class="profile-sub">বারবার ব্যবহার করেন এমন কাজগুলো বেছে নিন</div>
-
-        <div id="toggle-list"></div>
+        <div style="display:flex;justify-content:space-between;align-items:center;padding-bottom:4px;">
+          <div class="screen-title" style="padding-bottom:0;">প্রোফাইল</div>
+          <button id="mode-toggle-btn" onclick="toggleAppMode()" style="font-family:'Noto Serif Bengali';font-size:14px;background:var(--green-dark);color:white;border:none;border-radius:20px;padding:8px 16px;cursor:pointer;">সাধারণ মোড</button>
+        </div>
+        <div id="customize-section">
+          <div class="profile-section-title">আপনার হোমপেজ কাস্টমাইজ করুন</div>
+          <div class="profile-sub">বারবার ব্যবহার করেন এমন কাজগুলো বেছে নিন</div>
+          <div id="toggle-list"></div>
+        </div>
 
         <div class="settings-title">সেটিংস</div>
         <div class="settings-item">
@@ -562,6 +621,16 @@
     <button class="btn-outline" id="refund-btn" onclick="showRefundConfirm()" style="display:none;margin-top:0;">৩০ মিনিটে ফেরত নিন</button>
   </div>
 
+  <!-- WALKTHROUGH COMPLETE SCREEN -->
+  <div class="success-screen" id="wt-complete-screen">
+    <div style="font-size:64px;margin-bottom:16px;">🎉</div>
+    <div style="font-family:'Noto Serif Bengali';font-size:24px;font-weight:700;color:var(--green-dark);margin-bottom:12px;">অভিনন্দন!</div>
+    <div style="font-family:'Noto Serif Bengali';font-size:18px;color:var(--text-dark);margin-bottom:8px;">টিউটোরিয়াল সম্পন্ন হয়েছে।</div>
+    <div id="wt-reward-msg" style="font-family:'Noto Serif Bengali';font-size:20px;font-weight:700;color:var(--green-dark);background:var(--green-pale);padding:16px 28px;border-radius:16px;margin:16px 0 24px;">২০ টাকা আপনার অ্যাকাউন্টে যোগ হয়েছে!</div>
+    <button class="btn-primary" onclick="closeWalkthrough()">হোমে ফিরুন</button>
+    <button class="btn-outline" onclick="startPracticeMode()" style="margin-top:10px;width:100%;padding:14px;">অনুশীলন করুন</button>
+  </div>
+
   <!-- CONTACT PICKER MODAL (প্রাপক বেছে নিন) -->
   <div class="modal-overlay" id="contact-picker-modal" onclick="closeContactPicker(event)">
     <div class="modal-sheet" onclick="event.stopPropagation()">
@@ -617,10 +686,15 @@
   <div class="modal-overlay" id="tutorial-modal" onclick="closeTutorialModal(event)">
     <div class="modal-sheet" onclick="event.stopPropagation()">
       <div id="tutorial-content"></div>
-      <button class="btn-primary" id="tutorial-practice-btn" onclick="startPractice(currentTutorialKey)" style="margin-top:8px;padding:18px;">
-        অনুশীলন করুন
-        <div style="font-size:14px;font-weight:400;margin-top:4px;opacity:0.85;">✓ সম্পন্ন করলে ২০ টাকা পাবেন</div>
-      </button>
+
+    <button class="btn-primary" id="tutorial-practice-btn" onclick="startPractice(currentTutorialKey)" style="margin-top:8px; padding:14px 18px; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:4px;">
+      <span style="font-size:20px; font-weight:600;">শিখুন</span>
+      <span style="font-size:15px; font-weight:400; opacity:0.9;">✓ সম্পন্ন করলে ২০ টাকা পাবেন</span>
+    </button>
+    <button class="btn-outline" onclick="closeTutorialModal(); startPracticeMode();" style="margin-top:10px; width:100%; padding:14px;">
+      অনুশীলন করুন
+    </button>
+
     </div>
   </div>
 
@@ -700,15 +774,6 @@
 
   </div>
   <div id="wt-label" style="position:absolute;left:50%;transform:translateX(-50%);background:var(--green-dark);color:white;font-family:'Noto Serif Bengali';font-size:18px;padding:14px 22px;border-radius:16px;text-align:center;width:80%;max-width:300px;pointer-events:none;"></div>
-</div>
-
-<!-- WALKTHROUGH COMPLETION SCREEN -->
-<div id="wt-complete-screen" style="display:none;position:fixed;inset:0;z-index:10000;background:white;flex-direction:column;align-items:center;justify-content:center;padding:32px;text-align:center;">
-  <div style="font-size:64px;margin-bottom:16px;">🎉</div>
-  <div style="font-family:'Noto Serif Bengali';font-size:24px;font-weight:700;color:var(--green-dark);margin-bottom:12px;">অভিনন্দন!</div>
-  <div style="font-family:'Noto Serif Bengali';font-size:18px;color:var(--text-dark);margin-bottom:8px;">অনুশীলন সম্পন্ন হয়েছে।</div>
-  <div style="font-family:'Noto Serif Bengali';font-size:20px;font-weight:700;color:var(--green-dark);background:var(--green-pale);padding:16px 28px;border-radius:16px;margin:16px 0 24px;">🎁 ২০ টাকা আপনার অ্যাকাউন্টে যোগ হয়েছে!</div>
-  <button class="btn-primary" onclick="closeWalkthrough()">হোমে ফিরুন</button>
 </div>
 
 <script src="script.js"></script>

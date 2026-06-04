@@ -11,7 +11,6 @@ let currentSendContact = {
   color: "var(--teal-circle)",
 };
 let activeScreen = "home";
-let balanceVisible = true;
 let lastTxnId = null;
 let lastTxnTime = null;
 let lastTxnAmount = 0;
@@ -31,10 +30,22 @@ let billAmountValue = "500";
 
 let currentTutorialKey = 'send';
 
+let balanceVisible = false;       // hidden by default
+let balanceHideTimer = null;
+let walkthroughRewardGiven = false;
+let isPracticeMode = false;
+
+let confidenceScore = 0;
+let balanceCheckCount = 0;
+let sendMoneyCount = 0;
+let billsDoneSet = new Set(); // tracks which bill types done
+
+let isRegularMode = false;
+
 const profileToggles = {
   send: true,
   receive: true,
-  bills: false,
+  bills: true,
   contacts: true,
 };
 
@@ -530,8 +541,15 @@ function updateBalanceDisplay() {
 }
 
 function toggleBalanceVisibility() {
-  balanceVisible = !balanceVisible;
+  clearTimeout(balanceHideTimer);
+  balanceVisible = true;
   updateBalanceDisplay();
+  balanceCheckCount++;
+  updateConfidenceScore();
+  balanceHideTimer = setTimeout(() => {
+    balanceVisible = false;
+    updateBalanceDisplay();
+  }, 5000);
 }
 
 const ACTION_DEFS = {
@@ -985,38 +1003,61 @@ function executeSend() {
     ":" +
     (now.getMinutes() < 10 ? "০" : "") +
     bnNum(now.getMinutes());
-  balance -= currentSendAmount;
-  lastTxnAmount = currentSendAmount;
-  lastTxnContact = currentSendContact.name;
-  lastTxnTime = now.getTime();
-  const txn = {
-    name: currentSendContact.name,
-    avatar: currentSendContact.avatar,
-    amount: currentSendAmount,
-    credit: false,
-    time: "আজ " + timeStr,
-    refunded: false,
-    canRefundUntil: Date.now() + 30 * 60 * 1000,
-  };
-  transactions.unshift(txn);
-  lastTxnId = 0;
 
-  document.getElementById("success-title").textContent = "টাকা পাঠানো হয়েছে!";
+  const isMockSend = wtIntercepting || isPracticeMode;
+
+  if (!isMockSend) {
+    balance -= currentSendAmount;
+    lastTxnAmount = currentSendAmount;
+    lastTxnContact = currentSendContact.name;
+    lastTxnTime = now.getTime();
+    const txn = {
+      name: currentSendContact.name,
+      avatar: currentSendContact.avatar,
+      amount: currentSendAmount,
+      credit: false,
+      time: "আজ " + timeStr,
+      refunded: false,
+      canRefundUntil: Date.now() + 30 * 60 * 1000,
+    };
+    transactions.unshift(txn);
+    sendMoneyCount++;
+    updateConfidenceScore();
+    lastTxnId = 0;
+  }
+
+  document.getElementById("success-title").textContent = isPracticeMode
+    ? "অনুশীলন সম্পন্ন হয়েছে! 🎉"
+    : "টাকা পাঠানো হয়েছে!";
   playVoice("sent.mp3");
-  document.getElementById("success-body").innerHTML = `
-    <strong>${currentSendContact.name}</strong>-কে ${formatBDT(currentSendAmount)} পাঠানো হয়েছে।<br><br>
-    ৩০ মিনিটের মধ্যে ফেরত নিতে পারবেন।
-  `;
-  document.getElementById("refund-btn").style.display = "flex";
+  if (isPracticeMode) {
+    document.getElementById("success-body").innerHTML = `
+      আপনি সফলভাবে টাকা পাঠানো অনুশীলন করেছেন।<br><br>
+      এটি একটি অনুশীলন ছিল — কোনো টাকা কাটা হয়নি।
+    `;
+    document.getElementById("refund-btn").style.display = "none";
+  } else {
+    document.getElementById("success-body").innerHTML = `
+      <strong>${currentSendContact.name}</strong>-কে ${formatBDT(currentSendAmount)} পাঠানো হয়েছে।<br><br>
+      ৩০ মিনিটের মধ্যে ফেরত নিতে পারবেন।
+    `;
+    document.getElementById("refund-btn").style.display = "flex";
+  }
   document.getElementById("success-screen").classList.add("active");
   updateBalanceDisplay();
 }
 
 function closeSuccess() {
   if (wtIntercepting && wtStep === 7) wtAdvance();
+  if (isPracticeMode) {
+    isPracticeMode = false;
+    document.getElementById("practice-mode-bar").style.display = "none";
+    document.getElementById("success-screen").classList.remove("active");
+    navigate("home");
+    return;
+  }
   document.getElementById("success-screen").classList.remove("active");
   navigate("home");
-  // home voice already plays inside navigate("home")
 }
 
 function showRefundConfirm() {
@@ -1099,6 +1140,8 @@ function payBill() {
   });
   closeBillModal();
   updateBalanceDisplay();
+  billsDoneSet.add(currentBillType);
+  updateConfidenceScore();
   showToast(currentBillType + " বিল পরিশোধ হয়েছে!");
 }
 
@@ -1280,7 +1323,7 @@ const SEND_WALKTHROUGH = [
   { target: 'preset-100',         label: 'একশত টাকার বাটনে চাপুন',          audio: 'একশত টাকার বাটনে চাপুন',          event: 'preset-100' },
   { target: 'send-btn',           label: 'পাঠিয়ে দিন বাটনে চাপুন',          audio: 'পাঠিয়ে দিন বাটনে চাপুন',          event: 'send-btn' },
   { target: 'confirm-btn',        label: 'নিশ্চিত করুন বাটনে চাপুন',        audio: 'নিশ্চিত করুন বাটনে চাপুন',        event: 'confirm-btn' },
-  { target: 'pin-0000',           label: 'পিন দিন: ০০০০',                   audio: 'শূন্য শূন্য শূন্য শূন্য পিন দিন',  event: 'pin-0000' },
+  { target: 'pin-0000',           label: 'পিন দিন: ০০০০',                   audio: 'আপনার পিন নাম্বার দিন',  event: 'pin-0000' },
   { target: 'home-after-success', label: 'হোমে ফিরুন বাটনে চাপুন',          audio: 'হোমে ফিরুন বাটনে চাপুন',          event: 'home-after-success' },
 ];
 
@@ -1294,7 +1337,7 @@ function startPractice(key) {
   wtIntercepting = true;
   if (currentAudio) { currentAudio.pause(); currentAudio.currentTime = 0; }
   window.speechSynthesis && window.speechSynthesis.cancel();
-  document.getElementById('wt-complete-screen').style.display = 'none';
+  document.getElementById('wt-complete-screen').classList.remove('active');
   // Make sure we start on home
   navigate('home');
   setTimeout(() => showWtStep(), 400);
@@ -1383,17 +1426,171 @@ function endWalkthrough() {
   clearInterval(wtAudioLoop);
   wtIntercepting = false;
   document.getElementById('walkthrough-overlay').style.display = 'none';
-  // Add 20 tk reward
-  balance += 20;
-  updateBalanceDisplay();
-  // Show completion screen
+
   const cs = document.getElementById('wt-complete-screen');
-  cs.style.display = 'flex';
+  cs.classList.add('active');
+  const rewardDiv = document.getElementById('wt-reward-msg');
+
+  if (!walkthroughRewardGiven) {
+    walkthroughRewardGiven = true;
+    balance += 20;
+    updateBalanceDisplay();
+    // Add reward transaction log
+    const now = new Date();
+    const timeStr = bnNum(now.getHours()) + ":" + (now.getMinutes() < 10 ? "০" : "") + bnNum(now.getMinutes());
+    transactions.unshift({
+      name: "টিউটোরিয়াল পুরস্কার",
+      avatar: "🎁",
+      amount: 20,
+      credit: true,
+      time: "আজ " + timeStr,
+      refunded: false,
+      canRefundUntil: 0,
+    });
+    if (rewardDiv) rewardDiv.style.display = 'block';
+  } else {
+    if (rewardDiv) rewardDiv.style.display = 'none';
+  }
+
+  cs.classList.add('active');
 }
 
 function closeWalkthrough() {
-  document.getElementById('wt-complete-screen').style.display = 'none';
+  document.getElementById('wt-complete-screen').classList.remove('active');
   navigate('home');
+}
+
+function startPracticeMode() {
+  if (currentTutorialKey !== 'send') {
+    closeTutorialModal();
+    showToast('এটি পরীক্ষামূলক। এখনো কাজ করছে না।');
+    return;
+  }
+  isPracticeMode = true;
+  document.getElementById('practice-mode-bar').style.display = 'block';
+  document.getElementById('wt-complete-screen').classList.remove('active');
+  navigate('home');
+  setTimeout(() => {
+    showContactPickerThenSend();
+  }, 300);
+}
+
+function updateConfidenceScore() {
+  // Balance checks: 2pts each, max 5 times = 10
+  const balancePts = Math.min(balanceCheckCount, 5) * 2;
+  // Send money: 5pts each, max 6 times = 30
+  const sendPts = Math.min(sendMoneyCount, 6) * 5;
+  // Bills: 5pts each, 6 bill types = 30
+  const billPts = billsDoneSet.size * 5;
+
+  confidenceScore = balancePts + sendPts + billPts;
+
+  // Update all progress bars
+  document.querySelectorAll('.confidence-bar-fill').forEach(el => {
+    el.style.width = confidenceScore + '%';
+  });
+  document.querySelectorAll('.confidence-score-text').forEach(el => {
+    el.textContent = confidenceScore + '%';
+  });
+
+  // Update label based on score
+  let label = 'শুরু হচ্ছে...';
+  if (confidenceScore >= 70) label = 'দুর্দান্ত! 🌟';
+  else if (confidenceScore >= 50) label = 'ভালো হচ্ছে! 👍';
+  else if (confidenceScore >= 30) label = 'এগিয়ে যাচ্ছেন!';
+  else if (confidenceScore >= 10) label = 'শুরু হয়েছে!';
+  document.querySelectorAll('.confidence-label').forEach(el => {
+    el.textContent = label;
+  });
+}
+
+function toggleAppMode() {
+  isRegularMode = !isRegularMode;
+  document.body.classList.toggle('regular-mode', isRegularMode);
+
+  // Update toggle button text
+  const btn = document.getElementById('mode-toggle-btn');
+  if (btn) btn.textContent = isRegularMode ? 'সাধারণ মোড' : 'বেসিক মোড';
+
+  // In regular mode: force-mute voice and hide speaker button
+  // In basic mode: unmute and show speaker button again
+  const voiceBtn = document.getElementById('voice-mute-btn');
+  if (isRegularMode) {
+    if (!voiceMuted) {
+      voiceMuted = true;
+      const icon = document.getElementById('mute-icon');
+      if (icon) icon.innerHTML = `
+        <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/>
+        <line x1="23" y1="9" x2="17" y2="15"/>
+        <line x1="17" y1="9" x2="23" y2="15"/>
+      `;
+      if (voiceBtn) {
+        voiceBtn.style.background = 'var(--red-circle)';
+        voiceBtn.style.border = '2px solid #c0392b';
+      }
+    }
+    if (voiceBtn) voiceBtn.style.display = 'none';
+    if (currentAudio) { currentAudio.pause(); currentAudio.currentTime = 0; }
+  } else {
+    voiceMuted = false;
+    const icon = document.getElementById('mute-icon');
+    if (icon) icon.innerHTML = `
+      <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/>
+      <path d="M19.07 4.93a10 10 0 010 14.14"/>
+      <path d="M15.54 8.46a5 5 0 010 7.07"/>
+    `;
+    if (voiceBtn) {
+      voiceBtn.style.display = '';
+      voiceBtn.style.background = 'var(--green-dark)';
+      voiceBtn.style.border = 'none';
+    }
+  }
+
+  // Re-render home actions for correct grid
+  updateHomeActions();
+}
+
+function updateHomeActions() {
+  const container = document.getElementById("quick-actions");
+  const active = Object.keys(profileToggles).filter((k) => profileToggles[k]);
+
+  if (isRegularMode) {
+    // Regular mode: 4 main + 4 placeholder in 2 rows of 4
+    const mainCards = active.map((key) => {
+      const a = ACTION_DEFS[key];
+      return `<div class="action-card" onclick="${a.action}">
+        <div class="action-icon" style="background:${a.color};${a.label==='নিন'?'margin-bottom:6px':''}">
+          <svg viewBox="0 0 24 24" style="stroke:${a.iconStroke}">${a.icon}</svg>
+        </div>
+        <span class="action-label">${a.label}</span>
+      </div>`;
+    }).join('');
+
+    const placeholders = [
+      { label: 'যোগ করুন', color: 'var(--teal-circle)', icon: '<line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/>' },
+      { label: 'সঞ্চয়', color: 'var(--yellow-circle)', icon: '<path d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z"/>' },
+      { label: 'ঋণ', color: 'var(--red-circle)', icon: '<rect x="1" y="4" width="22" height="16" rx="2" ry="2"/><line x1="1" y1="10" x2="23" y2="10"/>' },
+      { label: 'ক্যাশ আউট', color: 'var(--purple-circle)', icon: '<path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/>' },
+    ].map(p => `<div class="action-card" onclick="showDummyToast()">
+      <div class="action-icon" style="background:${p.color}">
+        <svg viewBox="0 0 24 24" style="stroke:var(--green-dark);fill:none;stroke-width:1.5">${p.icon}</svg>
+      </div>
+      <span class="action-label">${p.label}</span>
+    </div>`).join('');
+
+    container.innerHTML = mainCards + placeholders;
+  } else {
+    // Basic mode: original 2x2 grid
+    container.innerHTML = active.map((key) => {
+      const a = ACTION_DEFS[key];
+      return `<div class="action-card" onclick="${a.action}">
+        <div class="action-icon" style="background:${a.color};${a.label==='নিন'?'margin-bottom:6px':''}">
+          <svg viewBox="0 0 24 24" style="stroke:${a.iconStroke}">${a.icon}</svg>
+        </div>
+        <span class="action-label">${a.label}</span>
+      </div>`;
+    }).join('');
+  }
 }
 
 updateClock();
