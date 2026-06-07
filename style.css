@@ -2001,3 +2001,22 @@ body.regular-mode #customize-section {
   opacity: 0.4;
   pointer-events: none;
 }
+
+/* ============ CASHBACK MODAL ANIMATIONS ============ */
+@keyframes cashbackBounce {
+  0% { transform: scale(0.7) translateY(40px); opacity: 0; }
+  60% { transform: scale(1.05) translateY(-6px); opacity: 1; }
+  80% { transform: scale(0.97) translateY(2px); }
+  100% { transform: scale(1) translateY(0); opacity: 1; }
+}
+@keyframes cashbackEmoji {
+  0%,100% { transform: rotate(-10deg) scale(1); }
+  50% { transform: rotate(10deg) scale(1.2); }
+}
+#cashback-modal.active #cashback-sheet {
+  animation: cashbackBounce 0.5s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+}
+#cashback-confetti {
+  animation: cashbackEmoji 1.2s ease-in-out infinite;
+  display: inline-block;
+}

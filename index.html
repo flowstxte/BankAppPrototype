@@ -212,6 +212,24 @@
   <!-- HISHAB (TRANSACTIONS) SCREEN - 2nd tab, transactions only -->
   <div id="receive-screen" class="screen">
 
+    <!-- Cashback Progress Banner -->
+    <div id="cashback-progress-banner" style="margin:16px 16px 0;background:linear-gradient(135deg,var(--green-dark),#2d7a4f);border-radius:16px;padding:16px 18px;">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;">
+        <div>
+          <div style="font-family:'Noto Serif Bengali';font-size:14px;font-weight:700;color:white;">ক্যাশব্যাক অফার 🎁</div>
+          <div style="font-family:'Noto Serif Bengali';font-size:12px;color:rgba(255,255,255,0.75);margin-top:2px;">প্রতি ৫টি সেন্ড মানিতে ১০ টাকা পাবেন</div>
+        </div>
+        <div style="text-align:right;">
+          <div id="cashback-count-text" style="font-family:'Noto Serif Bengali';font-size:22px;font-weight:800;color:white;">০/৫</div>
+          <div style="font-family:'Noto Serif Bengali';font-size:11px;color:rgba(255,255,255,0.7);">লেনদেন</div>
+        </div>
+      </div>
+      <div style="background:rgba(255,255,255,0.25);border-radius:8px;height:8px;overflow:hidden;">
+        <div id="cashback-bar-fill" style="background:white;height:100%;width:0%;border-radius:8px;transition:width 0.5s ease;"></div>
+      </div>
+      <div id="cashback-next-msg" style="font-family:'Noto Serif Bengali';font-size:12px;color:rgba(255,255,255,0.8);margin-top:8px;text-align:center;">আর ৫টি সেন্ড মানি করুন, ১০ টাকা পাবেন!</div>
+    </div>
+
     <!-- Transactions -->
     <div class="scroll-area" style="padding-bottom:20px;">
       <div class="section-title" style="padding:16px 20px 8px;">সাম্প্রতিক লেনদেন</div>
@@ -732,6 +750,22 @@
         <div class="key-btn del" onclick="numpadDelete()">⌫</div>
       </div>
       <button class="btn-primary" style="margin-top:12px;" onclick="confirmNumpad()">নিশ্চিত করুন</button>
+    </div>
+  </div>
+
+  <!-- CASHBACK CONGRATULATIONS MODAL -->
+  <div class="modal-overlay" id="cashback-modal" style="z-index:8500;">
+    <div class="modal-sheet" id="cashback-sheet" onclick="event.stopPropagation()" style="text-align:center;padding:32px 24px 28px;">
+      <div id="cashback-confetti" style="font-size:48px;margin-bottom:8px;">🎉</div>
+      <div style="font-family:'Noto Serif Bengali';font-size:22px;font-weight:800;color:var(--green-dark);margin-bottom:6px;">অভিনন্দন!</div>
+      <div style="font-family:'Noto Serif Bengali';font-size:15px;color:var(--text-mid);margin-bottom:20px;">আপনি ৫টি সেন্ড মানি লেনদেন সম্পন্ন করেছেন!</div>
+      <div style="background:linear-gradient(135deg,var(--green-dark),#2d7a4f);border-radius:18px;padding:20px 16px;margin-bottom:22px;">
+        <div style="font-family:'Noto Serif Bengali';font-size:14px;color:rgba(255,255,255,0.8);margin-bottom:4px;">আপনার ক্যাশব্যাক</div>
+        <div style="font-family:'Noto Serif Bengali';font-size:38px;font-weight:800;color:#fff;line-height:1.1;">৳ ১০</div>
+        <div style="font-family:'Noto Serif Bengali';font-size:13px;color:rgba(255,255,255,0.75);margin-top:4px;">আপনার ব্যালেন্সে যোগ হয়েছে ✓</div>
+      </div>
+      <div style="font-family:'Noto Serif Bengali';font-size:13px;color:var(--text-light);margin-bottom:20px;">প্রতি ৫টি সেন্ড মানিতে আপনি ১০ টাকা ক্যাশব্যাক পাবেন।</div>
+      <button class="btn-primary" onclick="closeCashbackModal()" style="width:100%;">দারুণ! ধন্যবাদ</button>
     </div>
   </div>
 

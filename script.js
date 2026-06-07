@@ -39,6 +39,7 @@ let confidenceScore = 0;
 let balanceCheckCount = 0;
 let sendMoneyCount = 0;
 let billsDoneSet = new Set(); // tracks which bill types done
+let cashbackSendCount = 0; // tracks send-money count for cashback milestone (resets conceptually every 5)
 
 let isRegularMode = false;
 
@@ -607,6 +608,26 @@ function renderTransactions() {
 function renderTransactionsHishab() {
   const list = document.getElementById("txn-list-hishab");
   if (!list) return;
+
+  // Update cashback progress bar
+  const progressInCycle = cashbackSendCount % 5;
+  const barWidth = (progressInCycle / 5) * 100;
+  const remaining = progressInCycle === 0 ? 5 : 5 - progressInCycle;
+  const countEl = document.getElementById("cashback-count-text");
+  const barEl = document.getElementById("cashback-bar-fill");
+  const msgEl = document.getElementById("cashback-next-msg");
+  if (countEl) countEl.textContent = bnNum(progressInCycle) + "/৫";
+  if (barEl) barEl.style.width = barWidth + "%";
+  if (msgEl) {
+    if (remaining === 5 && cashbackSendCount === 0) {
+      msgEl.textContent = "আর ৫টি সেন্ড মানি করুন, ১০ টাকা পাবেন!";
+    } else if (remaining === 5) {
+      msgEl.textContent = "✓ ক্যাশব্যাক পেয়েছেন! আর ৫টি করুন।";
+    } else {
+      msgEl.textContent = "আর " + bnNum(remaining) + "টি সেন্ড মানি করলে ১০ টাকা পাবেন!";
+    }
+  }
+
   if (transactions.length === 0) {
     list.innerHTML =
       "<div style=\"padding:20px;text-align:center;color:var(--text-light);font-family:'Noto Serif Bengali';font-size:14px;\">কোনো লেনদেন নেই</div>";
@@ -1022,8 +1043,31 @@ function executeSend() {
     };
     transactions.unshift(txn);
     sendMoneyCount++;
+    cashbackSendCount++;
     updateConfidenceScore();
     lastTxnId = 0;
+
+    // Cashback every 5 send-money transactions
+    if (cashbackSendCount % 5 === 0) {
+      const cashbackAmount = 10;
+      balance += cashbackAmount;
+      const nowCb = new Date();
+      const timeCb = bnNum(nowCb.getHours()) + ":" + (nowCb.getMinutes() < 10 ? "০" : "") + bnNum(nowCb.getMinutes());
+      transactions.unshift({
+        name: "ক্যাশব্যাক পুরস্কার 🎁",
+        avatar: "🎁",
+        amount: cashbackAmount,
+        credit: true,
+        time: "আজ " + timeCb,
+        refunded: false,
+        canRefundUntil: 0,
+      });
+      // Show cashback modal after the success screen briefly
+      setTimeout(() => {
+        document.getElementById('success-screen').classList.remove('active');
+        showCashbackModal();
+      }, 1800);
+    }
   }
 
   document.getElementById("success-title").textContent = isPracticeMode
@@ -1457,6 +1501,17 @@ function endWalkthrough() {
 
 function closeWalkthrough() {
   document.getElementById('wt-complete-screen').classList.remove('active');
+  navigate('home');
+}
+
+// ============ CASHBACK (every 5 send-money transactions) ============
+function showCashbackModal() {
+  document.getElementById('cashback-modal').classList.add('active');
+}
+
+function closeCashbackModal() {
+  document.getElementById('cashback-modal').classList.remove('active');
+  // Navigate home after celebrating
   navigate('home');
 }
 
