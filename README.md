@@ -24,10 +24,6 @@ An age-friendly, culturally adaptive mobile banking interface designed specifica
 ## Screenshots
 
 <p align="center">
-  <img src="https://raw.githubusercontent.com/flowstxte/BankAppPrototype/main/favicon.jpg" width="100" alt="Amar Bank Logo" style="border-radius: 20px; box-shadow: 0 4px 12px rgba(0,0,0,0.15);" />
-</p>
-
-<p align="center">
   <img src="https://raw.githubusercontent.com/flowstxte/BankAppPrototype/main/ss1.png" width="45%" alt="Amar Bank Home Screen" />
   <img src="https://raw.githubusercontent.com/flowstxte/BankAppPrototype/main/ss2.png" width="45%" alt="Amar Bank Help Screen" />
 </p>
