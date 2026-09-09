@@ -1,0 +1,22 @@
+# OS files
+.DS_Store
+Thumbs.db
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+venv/
+env/
+.venv/
+
+# Vercel
+.vercel
+
+# Node (if used)
+node_modules/
+npm-debug.log*
+
+# Environment
+.env
+.env.local
