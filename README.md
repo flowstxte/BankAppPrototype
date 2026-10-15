@@ -1,12 +1,11 @@
-# Amar Bank (আমার ব্যাংক) — Inclusive Digital Banking Prototype for Elderly Users
+# Amar Bank — Inclusive Digital Banking Prototype for Elderly Users
 
 An age-friendly, culturally adaptive mobile banking interface designed specifically to empower senior citizens and low-literacy users in Bangladesh and the Global South.
 
 **Live App**: [আমার ব্যাংক](https://amarbank.vercel.app/)
 
 > **Academic Project & Thesis**:  
-> Developed for **CSE400: PROJECT & THESIS**, Department of Computer Science and Engineering, **BRAC University**.  
-> Based on the undergraduate thesis: [_"Inclusive Design for Digital Banking Interfaces: Rethinking Interfaces and Design Processes for the Elderly Users in the Global South"_](Final_Paper.md).
+> Developed for **CSE400: PROJECT & THESIS**, Department of Computer Science and Engineering, **BRAC University**.
 
 <p align="left">
   <img src="https://skillicons.dev/icons?i=html,css,js,python" />
@@ -24,8 +23,8 @@ An age-friendly, culturally adaptive mobile banking interface designed specifica
 ## Screenshots
 
 <p align="center">
-  <img src="https://raw.githubusercontent.com/flowstxte/BankAppPrototype/main/ss1.png" width="45%" alt="Amar Bank Home Screen" />
-  <img src="https://raw.githubusercontent.com/flowstxte/BankAppPrototype/main/ss2.png" width="45%" alt="Amar Bank Help Screen" />
+  <img src="https://amarbank.vercel.app/ss1.png" width="45%" alt="Amar Bank Screenshot 1" />
+  <img src="https://amarbank.vercel.app/ss2.png" width="45%" alt="Amar Bank Screenshot 2" />
 </p>
 
 ---
